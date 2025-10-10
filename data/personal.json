@@ -1,0 +1,48 @@
+{
+    "doctors":
+    [
+        {
+            "id":"m1",
+            "name":"Yoly Sanchez",
+            "type": "personal",
+            "co_requested": "especulo",
+            "is_on_use": false,
+            "attributes":{"specialty": "ginecologo", "age": 52}
+        },
+        {
+            "id":"m2",
+            "name":"Darian Perez",
+            "type": "personal",
+            "co_requested": "electro",
+            "is_on_use": false,
+            "attributes":{"specialty": "cardioloco", "age": 25}
+        },
+        {
+            "id":"m3",
+            "name":"Dayan Rodriguez",
+            "type": "personal",
+            "co_requested": "laptop",
+            "is_on_use": false,
+            "attributes":{"specialty": "biomedico", "age": 22}
+        }
+    ],
+    "nurses":
+    [
+        {
+            "id":"m1",
+            "name":"Loraimis Villavicencio",
+            "type": "personal",
+            "co_requested": "microscopio",
+            "is_on_use": false,
+            "attributes":{"specialty": "nurse", "age": 21}
+        },
+        {
+            "id":"n1",
+            "name":"Ana Carla",
+            "type": "personal",
+            "co_requested": "geringa",
+            "is_on_use": false,
+            "attributes":{"specialty": "nurse", "age": 18}
+        }
+    ]
+}
