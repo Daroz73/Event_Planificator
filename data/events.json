@@ -1,0 +1,132 @@
+[
+    {
+        "id": "e1",
+        "name": "Cirujia de Corazon",
+        "personal_requested": 8,
+        "specialist_in_charge": "Cardiologo",
+        "begin": "2025-10-09T10:00:00",
+        "end": "2025-10-10T11:00:00",
+        "is_emergency": false,
+        "personal": [
+            {
+                "id": "m1",
+                "name": "Yoly Sanchez",
+                "type": "personal",
+                "co_requested": "especulo",
+                "is_on_use": false,
+                "attributes": {
+                    "specialty": "ginecologo",
+                    "age": 52
+                }
+            },
+            {
+                "id": "m2",
+                "name": "Darian Perez",
+                "type": "personal",
+                "co_requested": "electro",
+                "is_on_use": false,
+                "attributes": {
+                    "specialty": "cardioloco",
+                    "age": 25
+                }
+            },
+            {
+                "id": "m3",
+                "name": "Dayan Rodriguez",
+                "type": "personal",
+                "co_requested": "laptop",
+                "is_on_use": false,
+                "attributes": {
+                    "specialty": "biomedico",
+                    "age": 22
+                }
+            },
+            {
+                "id": "m1",
+                "name": "Loraimis Villavicencio",
+                "type": "personal",
+                "co_requested": "microscopio",
+                "is_on_use": false,
+                "attributes": {
+                    "specialty": "nurse",
+                    "age": 21
+                }
+            }
+        ],
+        "resources": [
+            {
+                "id": "r2",
+                "name": "laptop",
+                "type": "material",
+                "co_requested": "biomedico",
+                "is_on_use": false,
+                "attributes": {}
+            },
+            {
+                "id": "r3",
+                "name": "electro",
+                "type": "material",
+                "co_requested": "cardiologo",
+                "is_on_use": false,
+                "attributes": {}
+            },
+            {
+                "id": "r4",
+                "name": "geringa",
+                "type": "material",
+                "co_requested": "nurse",
+                "is_on_use": false,
+                "attributes": {}
+            },
+            {
+                "id": "r5",
+                "name": "microscopio",
+                "type": "material",
+                "co_requested": "nurse",
+                "is_on_use": false,
+                "attributes": {}
+            }
+        ]
+    },
+    {
+        "id": "e1",
+        "name": "Operacion de Corazon",
+        "personal_requested": "1",
+        "specialist_in_charge": "cardiologo",
+        "begin": "(2025, 10, 10)",
+        "end": "(2025, 10, 11)",
+        "is_emergency": "False",
+        "personal": [
+            {
+                "id": "m1",
+                "name": "Dr.Sanchez",
+                "type": "personal",
+                "co_requested": "especulo",
+                "is_on_use": "False",
+                "attributes": {
+                    "specialty": "genecologo"
+                }
+            },
+            {
+                "id": "M1",
+                "name": "Dr.Perez",
+                "type": "personal",
+                "co_requested": "electro",
+                "is_on_use": "False",
+                "attributes": {
+                    "specialty": "cardiologo"
+                }
+            }
+        ],
+        "resources": [
+            {
+                "id": "Q1",
+                "name": "Quirofano 1",
+                "type": "material",
+                "co_requested": "False",
+                "is_on_use": "{}",
+                "attributes": {}
+            }
+        ]
+    }
+]

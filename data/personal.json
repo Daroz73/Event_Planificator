@@ -53,5 +53,15 @@
             "specialty": "nurse",
             "age": 18
         }
+    },
+    {
+        "id": "m1",
+        "name": "Dr.Sanchez",
+        "type": "personal",
+        "co_requested": "especulo",
+        "is_on_use": "False",
+        "attributes": {
+            "specialty": "genecologo"
+        }
     }
 ]

@@ -22,14 +22,14 @@ while action != 3:
         esp_emp = input("Introduzca la especialidad del empleado: ")
         new_emp = Resource(id_emp, name_emp,"personal", co_requested, False, {"specialty": esp_emp})
         Events_Planificator.hire_employee(new_emp)
-        print(Data_saved_loader.load_personal())
+        print(Data_saved_loader.load_file())
     elif action == 4:
         id = input("Introduzca el id o index del empleado que queire despedir: ")
-        personal = Data_saved_loader.load_personal()
+        personal = Data_saved_loader.load_file()
         counter = 0
         for p in  personal:
             print(f"{counter}- {p}")
             counter += 1
         index = input()
-        Data_saved_loader.remove_employee(personal,index)
-        print(Data_saved_loader.load_personal())
+        Data_saved_loader.remove_(personal,index)
+        print(Data_saved_loader.load_file())

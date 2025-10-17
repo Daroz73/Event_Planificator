@@ -11,8 +11,8 @@ class Event:
     begin: datetime
     end: datetime
     is_emergency: bool
-    personal: list[Resource] = field(default_factory = list)
-    resources: list[Resource] = field(default_factory = list)
+    personal: list[dict] = field(default_factory = dict)
+    resources: list[dict] = field(default_factory = dict)
 
     def __repr__(self):
         return f"Event: {self.name} begins in {self.begin} ends in {self.end}, is emergency {self.is_emergency}. Resources {self.resources} and Personal {self.personal}"
