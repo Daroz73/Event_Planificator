@@ -1,35 +1,63 @@
 from core.resource import Resource
 from core.events import Event
+from core.worker import Worker
 from core.restriction import Restriction
 from core.events_planificator import Events_Planificator
 from core.data_saved_loader import Data_saved_loader
+from datetime import datetime, timedelta
+from core.domain import Domain
 
-r = Resource("Q1", "Quirofano 1", "material", False, {})
-# # print(r)
-m = Resource("m1", "Dr.Sanchez", "personal","especulo", False, {"specialty": "genecologo"})
-m1 = Resource("M1", "Dr.Perez", "personal", "electro", False, {"specialty": "cardiologo"})
-# print(m)
-e = Event("e1", "Operacion de Corazon", 1, "cardiologo", (2025,10,10),(2025,10,11), False,[m,m1], [r])
-# # print(e)
-# re = Restriction()
-# # print(re._there_is_only_specialist_in_charge(e))
-# ep = Events_Planificator([])
-# # print(ep)
 
-# personal = Data_saved_loader.load_nurses()
-# # print(personal)
-# n1 = Resource(personal[0]["id"], personal[0]["name"], personal[0]["type"], personal[0]["co_requested"], personal[0]["is_on_use"], personal[0]["attributes"])
-# # print(n1)
-# print()
+workers = [
+    Worker("M1", "Yoly Sanchez","especulo", [], "ginecologo"),
+    Worker("M2", "Dayan Rodriguez", "laptop", [], "biomedico"),
+    Worker("M3", "Darian Rodriguez", "electro", [],"cardiologo"),
+    Worker("E4", "Loraimis Villavicencio", "microscopio", [], "enfermero"),
+    Worker("E5", "Ana Carla", "geringua", [], "enfermero"),
+    Worker("E6", "Daniela", "duragina", [], "enfermero"),
+    Worker("M7", "Ernesto Castillo", "cuchilla", [], "cirujano"),
+    Worker("M8", "Barbaro Fuentes", "martillo", [], "ortopedico"),
+    Worker("E9", "Alejandra Vazques", "lapicero", [], "enfermero"),
+    Worker("E10", "Elber Galarga", "recetas", [], "enfermero"),
+]
 
-Data_saved_loader.append_(e,Data_saved_loader.load_file("events"),"events")
-print(Data_saved_loader.load_file("events"))
-# print(personal)
-# for p in personal["personal"]:
-    # print(p["id"])
-# print(Data_saved_loader.append_employee(m))
-# Data_saved_loader.append_resource(m, Data_saved_loader.load_resources())
-# Data_saved_loader.remove_resource(Data_saved_loader.load_resources(),0)
-# print(Data_saved_loader.load_resources())
-# e = Data_saved_loader.load_file("events")
-# print(e)
+resources = [
+    Resource("R1", "cuchilla", "cirujano"),
+    Resource("R2", "Sala de cirugía 2", "Sala"),
+    Resource("R3", "lapicero", "Equipo"),
+    Resource("R4", "Ecógrafo portátil", "Equipo"),
+    Resource("R5", "Ambulancia 1", "Vehículo"),
+    Resource("R6", "Ambulancia 2", "Vehículo"),
+    Resource("R7", "Monitor cardíaco", "Equipo"),
+    Resource("R8", "Sala de recuperación", "Sala"),
+    Resource("R9", "Ventilador mecánico", "Equipo"),
+    Resource("R10", "recetas", "Sala"),
+]
+
+events = [
+    Event("E1", "Cirugía de apendicitis", {"cirujano": 1, "enfermero": 2}, {"Quirofano":1, "anestesia":4, "cuchilla":8, "lapicero":2 ,"recetas":2}, "cirujano",
+          datetime.now(), datetime.now() + timedelta(hours=2), False, [workers[6], workers[8], workers[9]], [resources[0], resources[2], resources[9]]),
+    Event("E2", "Parto programado", [["Dra. García", "enfermera 2"]], [["R2", "R8"]], "Dra. García",
+          datetime.now() + timedelta(hours=3), datetime.now() + timedelta(hours=6), False, [], [resources[1], resources[7]]),
+    Event("E3", "Traslado de paciente crítico", [["Paramédico 1", "Paramédico 2"]], [["R5"]], "Dr. Méndez",
+          datetime.now(), datetime.now() + timedelta(hours=1), True, [], [resources[4]]),
+    Event("E4", "Cirugía cardíaca", [["Dr. Pérez", "enfermera 3"]], [["R10", "R7"]], "Dr. Pérez",
+          datetime.now() + timedelta(days=1), datetime.now() + timedelta(days=1, hours=5), False, [], [resources[9], resources[6]]),
+    Event("E5", "Ecografía abdominal", [["Técnico 1"]], [["R4"]], "Dr. Ruiz",
+          datetime.now() + timedelta(hours=2), datetime.now() + timedelta(hours=3), False, [], [resources[3]]),
+    Event("E6", "Examen de rayos X", [["Técnico 2"]], [["R3"]], "Dr. Ruiz",
+          datetime.now() + timedelta(hours=4), datetime.now() + timedelta(hours=5), False, [], [resources[2]]),
+    Event("E7", "Emergencia UCI", [["Dr. Soto", "enfermera 4"]], [["R9", "R8"]], "Dr. Soto",
+          datetime.now() + timedelta(hours=1), datetime.now() + timedelta(hours=4), True, [], [resources[8], resources[7]]),
+    Event("E8", "Cirugía ortopédica", [["Dr. Lara", "enfermera 5"]], [["R1", "R10"]], "Dr. Lara",
+          datetime.now() + timedelta(days=2), datetime.now() + timedelta(days=2, hours=6), False, [], [resources[0], resources[9]]),
+    Event("E9", "Consulta externa", [["Dr. Gómez"]], [["R8"]], "Dr. Gómez",
+          datetime.now() + timedelta(hours=8), datetime.now() + timedelta(hours=9), False, [], [resources[7]]),
+    Event("E10", "Prueba de ventilador", [["Técnico 3"]], [["R9"]], "Dr. Ramos",
+          datetime.now() + timedelta(hours=5), datetime.now() + timedelta(hours=6), False, [], [resources[8]]),
+]
+
+dom = Domain()
+dom.add_event(events[0])
+
+print(dom.events)

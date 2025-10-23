@@ -1,4 +1,5 @@
 import flet as ft
+from flet import ListView, Page, Text
 
 def main(page : ft.Page):
     page.title = "Event Gestor"
@@ -37,7 +38,7 @@ def main(page : ft.Page):
         ],
     )
     page.add(
-
+        
     )
 
 ft.app(target=main)

@@ -1,6 +1,7 @@
 import json
 from core.resource import Resource
 from core.events import Event
+ 
 
 # Clase encargada de cargar y guardar la info de los eventos 
 class Data_saved_loader:
