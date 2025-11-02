@@ -3,4 +3,4 @@ from core.resource import Resource
 
 @dataclass
 class Worker(Resource):
-   specialty: str = "general"
+   specialty: str = "enfermero"

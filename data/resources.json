@@ -4,31 +4,24 @@
         "name": "laptop",
         "type": "material",
         "co_requested": "biomedico",
-        "is_on_use": false,
-        "attributes": {}
+        "use_plan":[]
     },
     {
         "id": "r3",
         "name": "electro",
-        "type": "material",
         "co_requested": "cardiologo",
-        "is_on_use": false,
-        "attributes": {}
+        "use_plan":[]
     },
     {
         "id": "r4",
         "name": "geringa",
-        "type": "material",
         "co_requested": "nurse",
-        "is_on_use": false,
-        "attributes": {}
+        "use_plan":[]
     },
     {
         "id": "r5",
         "name": "microscopio",
-        "type": "material",
         "co_requested": "nurse",
-        "is_on_use": false,
-        "attributes": {}
+        "use_plan":[]
     }
 ]

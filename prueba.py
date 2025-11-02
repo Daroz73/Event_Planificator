@@ -1,7 +1,6 @@
 from core.resource import Resource
 from core.events import Event
 from core.worker import Worker
-from core.restriction import Restriction
 from core.events_planificator import Events_Planificator
 from core.data_saved_loader import Data_saved_loader
 from datetime import datetime, timedelta
@@ -32,6 +31,7 @@ resources = [
     Resource("R8", "Sala de recuperación", "Sala"),
     Resource("R9", "Ventilador mecánico", "Equipo"),
     Resource("R10", "recetas", "Sala"),
+    Resource("Q1", "Quirofano", "enfermero",{})
 ]
 
 events = [
@@ -58,6 +58,9 @@ events = [
 ]
 
 dom = Domain()
-dom.add_event(events[0])
+new_ev = Event("E2", "Chequeo", { "enfermero": 2}, {"Quirofano":1,}, "enfermero",
+          datetime.now(), datetime.now() + timedelta(hours=6), False, [workers[6], workers[8], workers[9]], [resources[10], resources[0], resources[2], resources[9]])
+dom.add_event(new_ev)
 
-print(dom.events)
+for e in dom.events:
+      print(e)

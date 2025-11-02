@@ -2,66 +2,43 @@
     {
         "id": "m1",
         "name": "Yoly Sanchez",
-        "type": "personal",
         "co_requested": "especulo",
-        "is_on_use": false,
-        "attributes": {
-            "specialty": "ginecologo",
-            "age": 52
-        }
+        "use_plan":[],
+        "specialty":"ginecologo"
     },
     {
         "id": "m2",
         "name": "Darian Perez",
-        "type": "personal",
         "co_requested": "electro",
-        "is_on_use": false,
-        "attributes": {
-            "specialty": "cardioloco",
-            "age": 25
-        }
+        "use_plan":[],
+        "specialty":"cardiologo"
     },
     {
         "id": "m3",
         "name": "Dayan Rodriguez",
-        "type": "personal",
         "co_requested": "laptop",
-        "is_on_use": false,
-        "attributes": {
-            "specialty": "biomedico",
-            "age": 22
-        }
+        "use_plan":[],
+        "specialty":"biomedico"
     },
     {
         "id": "m1",
         "name": "Loraimis Villavicencio",
-        "type": "personal",
         "co_requested": "microscopio",
-        "is_on_use": false,
-        "attributes": {
-            "specialty": "nurse",
-            "age": 21
-        }
+        "use_plan":[],
+        "specialty":"enfermero"
     },
     {
         "id": "n1",
         "name": "Ana Carla",
-        "type": "personal",
         "co_requested": "geringa",
-        "is_on_use": false,
-        "attributes": {
-            "specialty": "nurse",
-            "age": 18
-        }
+        "use_plan":[],
+        "specialty":"enfermero"
     },
     {
         "id": "m1",
         "name": "Dr.Sanchez",
-        "type": "personal",
         "co_requested": "especulo",
-        "is_on_use": "False",
-        "attributes": {
-            "specialty": "genecologo"
-        }
+        "use_plan":[],
+        "specialty":"cirujano"
     }
 ]
