@@ -22,7 +22,7 @@ class Events_Planificator:
                     break
             if valid:
                 list_event.append(event)
-                # Data_saved_loader.append_(event, Data_saved_loader.load_file_info("events"), "events")
+                Data_saved_loader.append_(event, "events")
 
     # metodo que me dice si dos eventos tienen la misa fecha de inicio
     @staticmethod

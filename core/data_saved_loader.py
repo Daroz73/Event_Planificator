@@ -22,7 +22,11 @@ class Data_saved_loader:
                 else:
                     lis.append(Data_saved_loader._format_json_to_resource(ele))
         return lis
-
+    # metodo para guardar la informacion en un json
+    @staticmethod
+    def set_file_info(info, file_name:str):
+        with open("data/"+f"{file_name}.json", "w",encoding="utf-8") as f:
+            json.dump(info, f, indent=4, ensure_ascii=False)
     # Metodo para cargar la info de un archivo .json
     @staticmethod
     def _load_file(file_name:str):
@@ -40,17 +44,23 @@ class Data_saved_loader:
     
     # metodo para agregar nuevos objetos al archivo .json
     @staticmethod
-    def append_(element, list, file_name:str):
+    def append_(element, file_name:str):
+        try:
+            current_data = Data_saved_loader._load_file(file_name)
+        except FileNotFoundError:
+            current_data = []
         new_elem = Data_saved_loader.format_to_json(element)
-        list.append(new_elem)
-        with open("data/"+f"{file_name}.json", "w", encoding="utf-8") as f:
-            json.dump(list, f, indent=4, ensure_ascii=False)
+        current_data.append(new_elem)
+        Data_saved_loader.set_file_info(current_data, file_name)
             
-    # Metodo para elminiar el ultimo objeto
+    # Metodo para elminiar el ultimo objeto y devolverlo
     def pop_(elements, file_name:str):
-        elements.pop_()
-        with open("data/"+f"{file_name}.json", "w", encoding="utf-8") as f:
-            json.dump(elements, f, indent=4, ensure_ascii=False)
+        last_element = elements.pop_()
+        elements_to_json = []
+        for e in elements:
+            elements_to_json.append(Data_saved_loader.format_to_json(e))
+        Data_saved_loader.set_file_info(elements_to_json, file_name)
+        return last_element
     
     # metodo para remover un objeto
     def remove_(elements, ident: int | str, file_name):
@@ -60,15 +70,16 @@ class Data_saved_loader:
                 aux_elems.append(elements[i])
             for i in range(ident+1, len(elements)):
                 aux_elems.append(elements[i])
-            with open("data/"+f"{file_name}.json", "w", encoding="utf-8") as f:
-                json.dump(aux_elems, f, indent=4, ensure_ascii=False)
         elif type(ident) == str:
             for emp in elements:
-                if emp["id"] != ident:
+                if emp.id.lower() != ident.lower():
                     aux_elems.append(emp) 
-            with open("data/"+f"{file_name}.json", "w", encoding="utf-8") as f:
-                json.dump(aux_elems, f, indent=4, ensure_ascii=False)
-    
+        elements_to_json = []
+        for e in aux_elems:
+            elements_to_json.append(Data_saved_loader.format_to_json(e))
+        elements = aux_elems
+        Data_saved_loader.set_file_info(elements_to_json,file_name)
+
     # metodo para convertir un Resource en un dicionario para poder almacenarlo en un JSON
     def _format_resource_to_json(element: Resource):
         json_element = {
@@ -77,7 +88,7 @@ class Data_saved_loader:
                 "co_requested":f"{element.co_requested}",
                 "use_plan":[]
             }
-        if element.isinstance(Worker):
+        if isinstance(element,Worker):
             json_element["specialty"] = element.specialty
         for e in element.use_plan:
             json_element["use_plan"].append(Data_saved_loader._format_event_to_json(e))
@@ -104,13 +115,11 @@ class Data_saved_loader:
         return new_event
     
     # metodo para convertir un Objeto(event, resource) en un formato valido para almacenarlo en un JSON
-    def format_to_json(element):
-        new_elem = None
-        if type(element) == Resource:
-            new_elem = Data_saved_loader._format_resource_to_json(element)
+    def format_to_json(element: Resource | Event):
+        if isinstance(element,Resource):
+            return Data_saved_loader._format_resource_to_json(element)
         else:
-            new_elem = Data_saved_loader._format_event_to_json(element)
-        return new_elem
+            return Data_saved_loader._format_event_to_json(element)
 
     # metodo para convertir un formato json a un Event
     @staticmethod

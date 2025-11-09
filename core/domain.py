@@ -27,3 +27,18 @@ class Domain:
     # metodo que agenda un evento
     def add_event(self, event:Event):
         Events_Planificator.Agg_Event(self.events, event)
+    # metodo para listar los eventos
+    def list_events(self) -> list[Event]:
+        return Data_saved_loader.load_file_info("events")
+    # metodo para eliminar un evento
+    def remove_event(self, event_id: str):
+        Data_saved_loader.remove_(self.events, event_id, "events")
+        self.events = Data_saved_loader.load_file_info("events")
+    # metodo para mostrar detalles de un event | resource | worker
+    def show_details(self, id: str, *args):
+        if id : 
+            if "e" in id:
+                for e in self.events:
+                    if e.id.lower() == id.lower():
+                        return e.show_details(*args)
+            return "El id introducido no corresponde a ningun evento"
