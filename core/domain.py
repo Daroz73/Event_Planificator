@@ -28,8 +28,14 @@ class Domain:
     def add_event(self, event:Event):
         Events_Planificator.Agg_Event(self.events, event)
     # metodo para listar los eventos
-    def list_events(self) -> list[Event]:
-        return Data_saved_loader.load_file_info("events")
+    def list_(self, string:str) -> list[Event]:
+        if string.lower() == "events":
+            return Data_saved_loader.load_file_info("events")
+        if string.lower() == "worker":
+            return Data_saved_loader.load_file_info("personal")
+        if string.lower() == "resource":
+            return Data_saved_loader.load_file_info("resources")
+        return []
     # metodo para eliminar un evento
     def remove_event(self, event_id: str):
         Data_saved_loader.remove_(self.events, event_id, "events")
