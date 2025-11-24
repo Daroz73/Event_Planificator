@@ -1,127 +1,16 @@
 import flet as ft
 from flet import Row
-from datetime import datetime
 import sys, os
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
+# Importar core
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
-from core.domain import Domain
-from core.worker import Worker
+# Importar utilidades externas
+from visual_utils import Visual_Utils
+from create_utils import Create_Utils
 
 
 def main(page: ft.Page):
     page.title = "Event Planificator"
-# =============================================================================================================
-    # funcion para mostrar los eventos en la interface
-    def show(e, kind:str):
-        if kind.lower() == "event":
-            _show_events(e)
-        else:
-            _show_resources(kind)
-    def _show_events(e):
-        page.clean()
-        page.add(navegation_bar)
-        dom = Domain()
-        events = dom.list_("events")
-        event_rows = []
-        for e in events:
-            event_row = Row([
-                ft.Text(f"Event ID: {e.id}"),
-                ft.Text(f"Event Name: {e.name}"),
-                ft.Text(f"Begin: {e.begin}"),
-                ft.Text(f"End: {e.end}"),
-                ft.SubmenuButton(
-                    leading=ft.Icon(ft.Icons.MORE_VERT),
-                    controls=[
-                        ft.MenuItemButton(content=ft.Text("View Details")),
-                        ft.MenuItemButton(content=ft.Text("Delete Event"))
-                    ]
-                )
-            ])
-            event_rows.append(event_row)
-        for er in event_rows:
-            page.add(er)
-
-    def _show_resources(kind):
-        page.clean()
-        page.add(navegation_bar)
-        dom = Domain()
-        l_kind = []
-        if kind.lower() == "worker":
-            l_kind = dom.list_("worker")
-        elif kind.lower() == "resource":
-            l_kind = dom.list_("resource")
-        
-        if len(l_kind) == 0:
-            page.add(ft.Text("No hay elementos para mostrar", color=ft.Colors.RED))
-            return
-        
-        rows = []
-        for l in l_kind:
-            if kind.lower() == "worker":
-                row = Row(
-                    controls=[
-                        ft.Text(f"id: {l.id}"),
-                        ft.Text(f"name: {l.name}"),
-                        ft.Text(f"co_requested: {l.co_requested}"),
-                        ft.Text(f"specialty: {l.specialty}"),
-                        ft.SubmenuButton(
-                            leading=ft.Icon(ft.Icons.MORE_VERT)
-                        )
-                    ]
-                )    
-            else: 
-                row = Row(
-                    controls=[
-                        ft.Text(f"id: {l.id}"),
-                        ft.Text(f"name: {l.name}"),
-                        ft.Text(f"co_requested: {l.co_requested}"),
-                        ft.SubmenuButton(
-                            leading=ft.Icon(ft.Icons.MORE_VERT)
-                        )
-                    ]
-                )
-            rows.append(row) 
-        for rr in rows:
-            page.add(rr)
-    # ========================================================================================================
-    # funcion para crear un nuevo evento
-    def create_event(e):
-        page.clean()
-        page.add(navegation_bar)
-        event_name = ft.TextField(label="Event Name", color=ft.Colors.BLACK, border_color=ft.Colors.BLACK, bgcolor=ft.Colors.WHITE)
-        specialist_in_charge = ft.TextField(label="Specialist in Charge")
-        begin = ft.Row([
-            ft.TextField(label="Year: "),
-            ft.TextField(label="Month: "),
-            ft.TextField(label="Day: ")
-        ])
-        end = ft.Row([
-            ft.TextField(label="Year: "),
-            ft.TextField(label="Month: "),
-            ft.TextField(label="Day: ")
-        ])
-        column = ft.Column([
-            event_name,
-            specialist_in_charge,
-            begin,
-            end,
-            ft.Text("Ask the personal requested: "),
-            ft.Row([
-                ft.TextField(label="Specialists: "),
-                ft.TextField(label="Count: "),
-                ft.FloatingActionButton(icon=ft.Icons.ADD)
-            ]),
-            ft.Text("Resources requested: "),
-            ft.Row([
-                ft.TextField(label="Resource: "),
-                ft.TextField(label="Count: "),
-                ft.FloatingActionButton(icon=ft.Icons.ADD)
-            ]),
-            ft.Checkbox(label="Is Emergency"),
-            ft.ElevatedButton("Create Event")
-        ])
-        page.add(column)
-# ==========================================================================================================
 
     navegation_bar = ft.AppBar(
         leading=ft.Icon(ft.Icons.BUSINESS),
@@ -133,26 +22,40 @@ def main(page: ft.Page):
             ft.SubmenuButton(
                 content=ft.Text("Events"),
                 controls=[
-                    ft.MenuItemButton(content=ft.Text("Create Event"), on_click=create_event),
-                    ft.MenuItemButton(content=ft.Text("View Events"), on_click=lambda e: show(e,"event")),
+                    # Usa el método externo Create_Utils
+                    ft.MenuItemButton(
+                        content=ft.Text("Create Event"),
+                        on_click=lambda e: Create_Utils.create_event(page, navegation_bar)
+                    ),
+                    # Usa el método externo Visual_Utils
+                    ft.MenuItemButton(
+                        content=ft.Text("View Events"),
+                        on_click=lambda e: Visual_Utils.show(page, "event", navegation_bar)
+                    )
                 ]
             ),
             ft.SubmenuButton(
                 content=ft.Text("Workers"),
                 controls=[
                     ft.MenuItemButton(content=ft.Text("Add Worker")),
-                    ft.MenuItemButton(content=ft.Text("View Worker"), on_click=lambda e : show(e, "worker"))
+                    ft.MenuItemButton(
+                        content=ft.Text("View Worker"),
+                        on_click=lambda e: Visual_Utils.show(page, "worker", navegation_bar)
+                    )
                 ]
             ),
             ft.SubmenuButton(
                 content=ft.Text("Resources"),
                 controls=[
                     ft.MenuItemButton(content=ft.Text("By Resource")),
-                    ft.MenuItemButton(content=ft.Text("View Resources"), on_click=lambda e : show(e,"resource"))
+                    ft.MenuItemButton(
+                        content=ft.Text("View Resources"),
+                        on_click=lambda e: Visual_Utils.show(page, "resource", navegation_bar)
+                    )
                 ]
             ),
-        ]                       
-                               )
+        ]
+    )
     page.add(navegation_bar)
 
 ft.app(main)
