@@ -10,9 +10,6 @@ class Visual_Utils:
 
     @staticmethod
     def show(page: ft.Page, kind: str, navegation_bar):
-        """
-        Método controlador que decide qué pantalla mostrar.
-        """
         if kind.lower() == "event":
             Visual_Utils._show_events(page, navegation_bar)
         else:
@@ -21,9 +18,6 @@ class Visual_Utils:
     # =====================================================================
     @staticmethod
     def _show_events(page: ft.Page, navegation_bar):
-        """
-        Muestra todos los eventos guardados.
-        """
         page.clean()
         page.add(navegation_bar)
 
@@ -53,9 +47,6 @@ class Visual_Utils:
     # =====================================================================
     @staticmethod
     def _show_resources(page: ft.Page, kind: str, navegation_bar):
-        """
-        Muestra la lista de workers o resources.
-        """
         page.clean()
         page.add(navegation_bar)
 
@@ -87,5 +78,10 @@ class Visual_Utils:
                     ft.SubmenuButton(leading=ft.Icon(ft.Icons.MORE_VERT))
                 ])
             page.add(row)
+# ===========================================================================================================
+    # funcion estatica para mostrar el plan de uso de un recurso que es una de las opciones que te da el menu desplegable de los 3 puntos
+    @staticmethod
+    def show_resources_use_plan():
+        pass
 
     

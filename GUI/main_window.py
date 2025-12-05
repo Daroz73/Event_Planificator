@@ -37,7 +37,10 @@ def main(page: ft.Page):
             ft.SubmenuButton(
                 content=ft.Text("Workers"),
                 controls=[
-                    ft.MenuItemButton(content=ft.Text("Add Worker")),
+                    ft.MenuItemButton(
+                        content=ft.Text("Add Worker"),
+                        on_click= lambda e: Create_Utils.add_worker(page, navegation_bar)
+                        ),
                     ft.MenuItemButton(
                         content=ft.Text("View Worker"),
                         on_click=lambda e: Visual_Utils.show(page, "worker", navegation_bar)
@@ -47,7 +50,10 @@ def main(page: ft.Page):
             ft.SubmenuButton(
                 content=ft.Text("Resources"),
                 controls=[
-                    ft.MenuItemButton(content=ft.Text("By Resource")),
+                    ft.MenuItemButton(
+                        content=ft.Text("By Resource"),
+                        on_click= lambda e: Create_Utils.add_resource(page, navegation_bar)
+                        ),
                     ft.MenuItemButton(
                         content=ft.Text("View Resources"),
                         on_click=lambda e: Visual_Utils.show(page, "resource", navegation_bar)

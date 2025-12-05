@@ -4,24 +4,24 @@
         "name": "laptop",
         "type": "material",
         "co_requested": "biomedico",
-        "use_plan":[]
+        "use_plan": []
     },
     {
         "id": "r3",
         "name": "electro",
         "co_requested": "cardiologo",
-        "use_plan":[]
+        "use_plan": []
     },
     {
         "id": "r4",
         "name": "geringa",
         "co_requested": "nurse",
-        "use_plan":[]
+        "use_plan": []
     },
     {
         "id": "r5",
         "name": "microscopio",
         "co_requested": "nurse",
-        "use_plan":[]
+        "use_plan": []
     }
 ]

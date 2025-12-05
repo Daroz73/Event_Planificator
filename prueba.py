@@ -60,7 +60,7 @@ events = [
 dom = Domain()
 new_ev = Event("E2", "Chequeo", { "enfermero": 2}, {"Quirofano":1,}, "enfermero",
           datetime.now(), datetime.now() + timedelta(hours=6), False, [workers[6], workers[8], workers[9]], [resources[10], resources[0], resources[2], resources[9]])
-dom.add_event(new_ev)
+dom._add_event(new_ev)
 for e in dom.events:
       print(e.name)
 print(" ")
