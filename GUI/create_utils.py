@@ -8,6 +8,7 @@ from core.domain import Domain
 from core.events import Event
 from core.worker import Worker
 from core.resource import Resource
+from core.events_planificator import Events_Planificator
 
 class Create_Utils:
     @staticmethod
@@ -58,13 +59,33 @@ class Create_Utils:
         expand=True
         )
 
+        personal_col = ft.Column([])
         specialist = ft.TextField(label="Specialists: ")
         count = ft.TextField(label="Count: ")
-        btn_add_specialist = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=lambda e: Create_Utils._agg_row(page, column, "Specialist: "))
+        btn_add_specialist = ft.FloatingActionButton(
+            icon=ft.Icons.ADD,
+            on_click=lambda e: Create_Utils._agg_row(page, personal_col, "Specialist: ")
+            )
+        personal_row = ft.Row([
+                specialist,
+                count,
+                btn_add_specialist
+            ])
+        personal_col.controls.append(personal_row)
 
+        resource_col = ft.Column([])
         resource = ft.TextField(label="Resource: ")
         r_count = ft.TextField(label="Count: ")
-        btn_add_resource = ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=lambda e: Create_Utils._agg_row(page, column, "Resource: "))
+        btn_add_resource = ft.FloatingActionButton(
+            icon=ft.Icons.ADD,
+            on_click=lambda e: Create_Utils._agg_row(page, resource_col, "Resource: ")
+            )
+        resource_row = ft.Row([
+                resource,
+                r_count,
+                btn_add_resource
+            ])
+        resource_col.controls.append(resource_row)
 
         is_emergency = ft.Checkbox(label="Is Emergency?")
 
@@ -76,22 +97,16 @@ class Create_Utils:
             ft.Text("End Date: "),
             end,
             ft.Text("Ask the personal requested: "),
-            ft.Row([
-                specialist,
-                count,
-                btn_add_specialist
-            ]),
+            personal_col,
             ft.Text("Resources requested: "),
-            ft.Row([
-                resource,
-                r_count,
-                btn_add_resource
-            ]),
+            resource_col,
             is_emergency,
             ft.ElevatedButton("Create Event",
-                              on_click=lambda e: Create_Utils._create_event(page, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, b_sec.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, e_sec.value, is_emergency.value,[],[])
+                              on_click=lambda e: Create_Utils._create_event(page, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, b_sec.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, e_sec.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
             )
-        ])
+        ],
+            scroll="auto",
+            expand=True)
 
         page.add(column)
 # ===========================================================================================================
@@ -146,8 +161,10 @@ class Create_Utils:
         id = dom.ids_generator("e")
         begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, b_sec)
         end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, e_sec)
-        event = Event(id, name, specialist_in_charge, begin_date, end_date, is_emergency, personal_requested, resources_requested)
+        event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
+        Events_Planificator.add_resource(event)
         print(event)
+        dom.add(event)
     # ==========
     @staticmethod
     def _create_worker(page:ft.Page, name:str, co_requested:str, speciality: str):
@@ -167,13 +184,43 @@ class Create_Utils:
     # ==============================================
     @staticmethod
     def _agg_row(page: ft.Page, column: ft.Column, label_value: str):
+        new_row = ft.Row([])
         first_item = ft.TextField(label=label_value)
         second_item = ft.TextField(label="Count: ")
-        new_row = ft.Row([
+        new_row.controls = [
             first_item,
             second_item,
-            ft.FloatingActionButton(icon=ft.Icons.ADD, on_click=lambda e: Create_Utils._agg_row(page, column, label_value)),
-            ft.FloatingActionButton(icon=ft.Icons.REMOVE)
-        ])
-        column.controls.insert(-4, new_row)
+            ft.FloatingActionButton(
+                icon=ft.Icons.ADD, 
+                on_click=lambda e: Create_Utils._agg_row(page, column, label_value)
+                ),
+            ft.FloatingActionButton(
+                icon=ft.Icons.REMOVE,
+                on_click=lambda e: Create_Utils._remove_row(page, column, new_row)
+                )
+        ]
+        column.controls.insert(1,new_row)
         page.update()
+    # =============================================
+    @staticmethod
+    def _remove_row(page: ft.Page, column: ft.Column, row: ft.Row):
+        column.controls.remove(row)
+        page.update()
+    # =============================================
+    @staticmethod
+    def _get_values_from_column(column: ft.Column) -> dict:
+        extracted_dict = {}
+        for row in column.controls:
+            if isinstance(row, ft.Row):
+                values = []
+                for control in row.controls:
+                    if isinstance(control, ft.TextField):
+                        values.append(control.value)
+                if len(values) == 2:
+                    key = values[0]
+                    try:
+                        value = int(values[1])
+                    except ValueError:
+                        value = 0
+                    extracted_dict[key] = value
+        return extracted_dict

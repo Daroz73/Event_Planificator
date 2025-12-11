@@ -10,7 +10,7 @@
         "is_emergency": "False",
         "workers": [
             {
-                "id": "m2",
+                "id": "w2",
                 "name": "Darian Perez",
                 "co_requested": "electro",
                 "use_plan": [],
@@ -27,7 +27,7 @@
         ]
     },
     {
-        "id": "E2",
+        "id": "e2",
         "name": "Chequeo",
         "personal_requested": {
             "enfermero": 2
@@ -41,7 +41,7 @@
         "is_emergency": "False",
         "workers": [
             {
-                "id": "M7",
+                "id": "w7",
                 "name": "Ernesto Castillo",
                 "co_requested": "cuchilla",
                 "use_plan": [],
@@ -64,25 +64,25 @@
         ],
         "resources": [
             {
-                "id": "Q1",
+                "id": "r1",
                 "name": "Quirofano",
                 "co_requested": "enfermero",
                 "use_plan": []
             },
             {
-                "id": "R1",
+                "id": "r5",
                 "name": "cuchilla",
                 "co_requested": "cirujano",
                 "use_plan": []
             },
             {
-                "id": "R3",
+                "id": "r3",
                 "name": "lapicero",
                 "co_requested": "Equipo",
                 "use_plan": []
             },
             {
-                "id": "R10",
+                "id": "r10",
                 "name": "recetas",
                 "co_requested": "Sala",
                 "use_plan": []

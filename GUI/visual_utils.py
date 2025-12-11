@@ -5,6 +5,9 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(ROOT)
 from flet import Row, Column
 from core.domain import Domain
+from delete_utils import Delete_Utils
+from core.worker import Worker
+from core.resource import Resource
 
 class Visual_Utils:
 
@@ -29,16 +32,28 @@ class Visual_Utils:
             return
 
         for e in events:
+            event_id = ft.Text(f"Event ID: {e.id}")
+            event_name = ft.Text(f"Event Name: {e.name}")
+            event_begin = ft.Text(f"Begin: {e.begin}")
+            event_end = ft.Text(f"End: {e.end}")
+            view_details_option = ft.MenuItemButton(
+                content=ft.Text("View Details"),
+                on_click=lambda e, e_id=e.id: Visual_Utils.show_event_details(page,e_id)
+                )
+            delete_option = ft.MenuItemButton(
+                content=ft.Text("Delete Event"),
+                on_click=lambda e, e_id=e.id: Delete_Utils.remove_item_grafic(page, "e", e_id, event_row)
+                )
             event_row = Row([
-                ft.Text(f"Event ID: {e.id}"),
-                ft.Text(f"Event Name: {e.name}"),
-                ft.Text(f"Begin: {e.begin}"),
-                ft.Text(f"End: {e.end}"),
+                event_id,
+                event_name,
+                event_begin,
+                event_end,
                 ft.SubmenuButton(
                     leading=ft.Icon(ft.Icons.MORE_VERT),
                     controls=[
-                        ft.MenuItemButton(content=ft.Text("View Details")),
-                        ft.MenuItemButton(content=ft.Text("Delete Event"))
+                        view_details_option,
+                        delete_option
                     ]
                 )
             ])
@@ -63,25 +78,147 @@ class Visual_Utils:
 
         for l in items:
             if kind.lower() == "worker":
-                row = Row([
-                    ft.Text(f"id: {l.id}"),
-                    ft.Text(f"name: {l.name}"),
-                    ft.Text(f"co_requested: {l.co_requested}"),
-                    ft.Text(f"specialty: {l.specialty}"),
-                    ft.SubmenuButton(leading=ft.Icon(ft.Icons.MORE_VERT))
-                ])
+                row = Row([])
+                worker_id = ft.Text(f"id: {l.id}")
+                worker_name = ft.Text(f"name: {l.name}")
+                worker_co_requested = ft.Text(f"co_requested: {l.co_requested}")
+                worker_specialty = ft.Text(f"specialty: {l.specialty}")
+                worker_view_use_plan = ft.MenuItemButton(
+                    content=ft.Text("View Use Plan"),
+                    on_click=lambda e, wid=l.id: Visual_Utils.show_use_plan(page, wid, kind)
+                )
+                worker_delete_option = ft.MenuItemButton(
+                    content=ft.Text("Delete Worker"),
+                    on_click=lambda e, wid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, "w", wid, row_copy)
+                )
+                row.controls = [
+                    worker_id,
+                    worker_name,
+                    worker_co_requested,
+                    worker_specialty,
+                    ft.SubmenuButton(
+                        leading=ft.Icon(ft.Icons.MORE_VERT),
+                        controls=[
+                            worker_view_use_plan,
+                            worker_delete_option
+                        ])
+                ]
             else:
-                row = Row([
-                    ft.Text(f"id: {l.id}"),
-                    ft.Text(f"name: {l.name}"),
-                    ft.Text(f"co_requested: {l.co_requested}"),
-                    ft.SubmenuButton(leading=ft.Icon(ft.Icons.MORE_VERT))
-                ])
+                row = Row([])
+                resource_id = ft.Text(f"id: {l.id}")
+                resource_name = ft.Text(f"name: {l.name}")
+                resource_co_requested = ft.Text(f"co_requested: {l.co_requested}")
+                resource_view_use_plan = ft.MenuItemButton(
+                    content=ft.Text("View Use Plan"),
+                    on_click=lambda e, rid=l.id: Visual_Utils.show_use_plan(page, rid, kind)
+                )
+                resource_delete_option = ft.MenuItemButton(
+                    content=ft.Text("Delete Resource"),
+                    on_click=lambda e, rid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, "r", rid, row_copy)
+                )
+                row.controls = [
+                    resource_id,
+                    resource_name,
+                    resource_co_requested,
+                    ft.SubmenuButton(
+                        leading=ft.Icon(ft.Icons.MORE_VERT),
+                        controls=[
+                            resource_view_use_plan,
+                            resource_delete_option
+                        ])
+                ]
             page.add(row)
 # ===========================================================================================================
     # funcion estatica para mostrar el plan de uso de un recurso que es una de las opciones que te da el menu desplegable de los 3 puntos
     @staticmethod
-    def show_resources_use_plan():
-        pass
-
-    
+    def show_use_plan(page:ft.Page, id:str, kind:str):
+        dom = Domain()
+        item = dom.get_item(kind, id)
+        navegation_bar = page.controls[0]
+        page.clean()
+        page.add(navegation_bar)
+        print(item.use_plan)
+        column_use_plan = ft.Column()
+        for e in item.use_plan:
+            event_id = ft.Text(f"ID: {e.id}")
+            event_name = ft.Text(f"Name: {e.name}")
+            event_begin = ft.Text(f"Begin: {e.begin}")
+            event_end = ft.Text(f"End: {e.end}")
+            view_details_option = ft.MenuItemButton(
+                content=ft.Text("View Details")
+            )
+            row = ft.Row([
+                event_id,
+                event_name,
+                event_begin,
+                event_end,
+                ft.SubmenuButton(
+                    leading=ft.Icon(ft.Icons.MORE_VERT),
+                    controls=[
+                        view_details_option
+                    ])
+            ])
+            column_use_plan.controls.append(row)
+        page.add(column_use_plan)
+# ========================================================================================================
+    # metodo para mostrar los detalles de un evento
+    @staticmethod
+    def show_event_details(page:ft.Page, id:str):
+        navegation_bar = page.controls[0]
+        page.clean()
+        page.add(navegation_bar)
+        dom = Domain()
+        event_col = ft.Column([])
+        event = dom.get_item("e", id)
+        event_id = ft.Text(f"Id: {event.id}")
+        event_name = ft.Text(f"Name: {event.name}")
+        event_specialist_in_charge = ft.Text(f"Specialist in Charge: {event.specialist_in_charge}")
+        event_begin = ft.Text(f"Begin: {event.begin}")
+        event_end = ft.Text(f"End: {event.end}")
+        event_emergency = ft.Text(f"Emergency: {event.is_emergency}")
+        event_workers_column = ft.Column([])
+        event_resources_column = ft.Column([])
+        for w in event.workers:
+            w_item = Visual_Utils._get_visual_resource(w)
+            event_workers_column.controls.append(w_item)
+        for r in event.resources:
+            r_item = Visual_Utils._get_visual_resource(r)
+            event_resources_column.controls.append(r_item)
+        event_row = ft.Row([
+            event_id,
+            event_name,
+            event_specialist_in_charge,
+            event_begin,
+            event_end,
+            event_emergency
+        ])
+        event_col.controls = [
+            event_row,
+            event_workers_column,
+            event_resources_column
+        ]
+        page.add(event_col)
+    # =========================================================
+    def _get_visual_resource(item: Worker | Resource):
+        item_row = ft.Row([])
+        if isinstance(item, Worker):
+            worker_id = ft.Text(f"Id: {item.id}")
+            worker_name = ft.Text(f"Name: {item.name}")
+            worker_co_requested = ft.Text(f"Co Requested: {item.co_requested}")
+            worker_specialty = ft.Text(f"Specialty: {item.specialty}")
+            item_row.controls = [
+                worker_id,
+                worker_name,
+                worker_co_requested,
+                worker_specialty
+            ]
+        elif isinstance(item, Resource):
+            resource_id = ft.Text(f"Id: {item.id}")
+            resource_name = ft.Text(f"Name: {item.name}")
+            resource_co_requested = ft.Text(f"Co Requested: {item.co_requested}")
+            item_row.controls = [
+                resource_id,
+                resource_name,
+                resource_co_requested,
+            ]
+        return item_row

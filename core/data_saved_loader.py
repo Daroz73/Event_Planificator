@@ -7,9 +7,6 @@ from core.events import Event
 
 # Clase encargada de cargar y guardar la info de los eventos 
 class Data_saved_loader:
-    def __init__(self):
-        pass
-
     # metodo para devolver un lista de elementos cargados de un .json
     @staticmethod
     def load_file_info(file_name: str) -> list:

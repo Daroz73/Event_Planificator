@@ -91,3 +91,18 @@ class Domain:
             else:
                 counter += 1
         return new_id
+    # metodo para obtener un item especifico por su id
+    def get_item(self, type:str, id:str) -> Event | Worker | Resource | None:
+        if type.lower() == "e" or type.lower() == "event":
+            for item in self.events:
+                if item.id.lower() == id.lower():
+                    return item
+        elif type.lower() == "w" or type.lower() == "worker":
+            for item in self.workers:
+                if item.id.lower() == id.lower():
+                    return item
+        elif type.lower() == "r" or type.lower() == "resource":
+            for item in self.resources:
+                if item.id.lower() == id.lower():
+                    return item
+        return None
