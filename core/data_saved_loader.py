@@ -83,12 +83,10 @@ class Data_saved_loader:
                 "id":f"{element.id}",
                 "name":f"{element.name}", 
                 "co_requested":f"{element.co_requested}",
-                "use_plan":[]
+                "use_plan":element.use_plan
             }
         if isinstance(element,Worker):
             json_element["specialty"] = element.specialty
-        for e in element.use_plan:
-            json_element["use_plan"].append(Data_saved_loader._format_event_to_json(e))
         return json_element
     
     # metodo para convertir un event en un formato valido para un JSON
@@ -102,13 +100,9 @@ class Data_saved_loader:
                 "begin":f"{event.begin}",
                 "end":f"{event.end}",
                 "is_emergency":f"{event.is_emergency}",
-                "workers":[],
-                "resources":[]
+                "workers":[w.id for w in event.workers],
+                "resources":[r.id for r in event.resources]
             }
-        for p in event.workers:
-            new_event["workers"].append(Data_saved_loader._format_resource_to_json(p))
-        for r in event.resources:
-            new_event["resources"].append(Data_saved_loader._format_resource_to_json(r))
         return new_event
     
     # metodo para convertir un Objeto(event, resource) en un formato valido para almacenarlo en un JSON
@@ -130,8 +124,8 @@ class Data_saved_loader:
             begin=Data_saved_loader._safe_parse_date(event.get("begin")), # convertir de string a datatime
             end=Data_saved_loader._safe_parse_date(event.get("end")), # convertir de string a datatime
             is_emergency=event.get("is_emergency", False),
-            workers=Data_saved_loader._safe_parse_list(event.get("workers",[])),
-            resources=Data_saved_loader._safe_parse_list(event.get("resources",[]))
+            workers=event.get("workers",[]),
+            resources=event.get("resources",[])
             )
     
     # metodo auxiliar para asegurar que las listas de resources se carguen correctamente

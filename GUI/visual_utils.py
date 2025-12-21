@@ -8,28 +8,35 @@ from core.domain import Domain
 from delete_utils import Delete_Utils
 from core.worker import Worker
 from core.resource import Resource
+from creation_validate import Creation_Validate
 
 class Visual_Utils:
 
     @staticmethod
-    def show(page: ft.Page, kind: str, navegation_bar):
+    def show(page: ft.Page, kind: str, navegation_bar, domain: Domain):
         if kind.lower() == "event":
-            Visual_Utils._show_events(page, navegation_bar)
+            Visual_Utils._show_events(page, navegation_bar, domain)
         else:
-            Visual_Utils._show_resources(page, kind, navegation_bar)
+            Visual_Utils._show_resources(page, kind, navegation_bar, domain)
 
     # =====================================================================
     @staticmethod
-    def _show_events(page: ft.Page, navegation_bar):
+    def _show_events(page: ft.Page, navegation_bar, dom:Domain):
         page.clean()
         page.add(navegation_bar)
 
-        dom = Domain()
+        dom.rebuild_relations()
         events = dom.list_("events")
 
         if len(events) == 0:
             page.add(ft.Text("No hay eventos registrados", color=ft.Colors.RED))
             return
+
+        save_btn = ft.ElevatedButton(
+            text = "Save",
+            icon=ft.Icon(ft.Icons.SAVE),
+            on_click=lambda e: Visual_Utils.save_deletions(page,dom)
+        )
 
         for e in events:
             event_id = ft.Text(f"Event ID: {e.id}")
@@ -42,7 +49,7 @@ class Visual_Utils:
                 )
             delete_option = ft.MenuItemButton(
                 content=ft.Text("Delete Event"),
-                on_click=lambda e, e_id=e.id: Delete_Utils.remove_item_grafic(page, "e", e_id, event_row)
+                on_click=lambda e, e_id=e.id: Delete_Utils.remove_item_grafic(page, dom, "e", e_id, event_row)
                 )
             event_row = Row([
                 event_id,
@@ -58,14 +65,15 @@ class Visual_Utils:
                 )
             ])
             page.add(event_row)
+        page.add(save_btn)
 
     # =====================================================================
     @staticmethod
-    def _show_resources(page: ft.Page, kind: str, navegation_bar):
+    def _show_resources(page: ft.Page, kind: str, navegation_bar, dom:Domain):
         page.clean()
         page.add(navegation_bar)
 
-        dom = Domain()
+        dom.rebuild_relations()
 
         if kind.lower() == "worker":
             items = dom.list_("worker")
@@ -75,6 +83,12 @@ class Visual_Utils:
         if len(items) == 0:
             page.add(ft.Text("No hay elementos para mostrar", color=ft.Colors.RED))
             return
+
+        save_btn = ft.ElevatedButton(
+            text = "Save",
+            icon=ft.Icon(ft.Icons.SAVE),
+            on_click=lambda e: Visual_Utils.save_deletions(page, dom)
+        )
 
         for l in items:
             if kind.lower() == "worker":
@@ -89,7 +103,7 @@ class Visual_Utils:
                 )
                 worker_delete_option = ft.MenuItemButton(
                     content=ft.Text("Delete Worker"),
-                    on_click=lambda e, wid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, "w", wid, row_copy)
+                    on_click=lambda e, wid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, dom, "w", wid, row_copy)
                 )
                 row.controls = [
                     worker_id,
@@ -103,6 +117,7 @@ class Visual_Utils:
                             worker_delete_option
                         ])
                 ]
+                page.add(row)
             else:
                 row = Row([])
                 resource_id = ft.Text(f"id: {l.id}")
@@ -114,7 +129,7 @@ class Visual_Utils:
                 )
                 resource_delete_option = ft.MenuItemButton(
                     content=ft.Text("Delete Resource"),
-                    on_click=lambda e, rid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, "r", rid, row_copy)
+                    on_click=lambda e, rid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, dom, "r", rid, row_copy)
                 )
                 row.controls = [
                     resource_id,
@@ -127,12 +142,15 @@ class Visual_Utils:
                             resource_delete_option
                         ])
                 ]
-            page.add(row)
+                page.add(row)
+        page.add(save_btn)
+        
 # ===========================================================================================================
     # funcion estatica para mostrar el plan de uso de un recurso que es una de las opciones que te da el menu desplegable de los 3 puntos
     @staticmethod
     def show_use_plan(page:ft.Page, id:str, kind:str):
         dom = Domain()
+        dom.rebuild_relations()
         item = dom.get_item(kind, id)
         navegation_bar = page.controls[0]
         page.clean()
@@ -168,6 +186,7 @@ class Visual_Utils:
         page.clean()
         page.add(navegation_bar)
         dom = Domain()
+        dom.rebuild_relations()
         event_col = ft.Column([])
         event = dom.get_item("e", id)
         event_id = ft.Text(f"Id: {event.id}")
@@ -222,3 +241,19 @@ class Visual_Utils:
                 resource_co_requested,
             ]
         return item_row
+    # =========================================================
+    # metodo para guardar los cambios de los elementos borrados
+    def save_deletions(page:ft.Page, dom:Domain):
+        if len(dom.event_to_delete) > 0:
+            for e_id in set(dom.event_to_delete):
+                dom.remove_item("e", e_id)
+        if len(dom.worker_to_delete) > 0:
+            for w_id in set(dom.worker_to_delete):
+                dom.remove_item("w", w_id)
+        if len(dom.resource_to_delete) > 0:
+            for r_id in set(dom.resource_to_delete):
+                dom.remove_item("r", r_id)
+        dlg = Creation_Validate._create_dialog(page, "Save", "Deletions saved successfully")
+        dlg.open = True
+        page.add(dlg)
+        page.update()

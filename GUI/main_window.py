@@ -7,10 +7,12 @@ sys.path.append(ROOT)
 # Importar utilidades externas
 from visual_utils import Visual_Utils
 from create_utils import Create_Utils
+from core.domain import Domain
 
 
 def main(page: ft.Page):
     page.title = "Event Planificator"
+    domain = Domain()
 
     navegation_bar = ft.AppBar(
         leading=ft.Icon(ft.Icons.BUSINESS),
@@ -30,7 +32,7 @@ def main(page: ft.Page):
                     # Usa el método externo Visual_Utils
                     ft.MenuItemButton(
                         content=ft.Text("View Events"),
-                        on_click=lambda e: Visual_Utils.show(page, "event", navegation_bar)
+                        on_click=lambda e: Visual_Utils.show(page, "event", navegation_bar, domain)
                     )
                 ]
             ),
@@ -43,7 +45,7 @@ def main(page: ft.Page):
                         ),
                     ft.MenuItemButton(
                         content=ft.Text("View Worker"),
-                        on_click=lambda e: Visual_Utils.show(page, "worker", navegation_bar)
+                        on_click=lambda e: Visual_Utils.show(page, "worker", navegation_bar, domain)
                     )
                 ]
             ),
@@ -56,10 +58,10 @@ def main(page: ft.Page):
                         ),
                     ft.MenuItemButton(
                         content=ft.Text("View Resources"),
-                        on_click=lambda e: Visual_Utils.show(page, "resource", navegation_bar)
+                        on_click=lambda e: Visual_Utils.show(page, "resource", navegation_bar, domain)
                     )
                 ]
-            ),
+            )
         ]
     )
     page.add(navegation_bar)

@@ -35,10 +35,10 @@
         "specialty": "enfermero"
     },
     {
-        "id": "w6",
-        "name": "Dr.Sanchez",
-        "co_requested": "especulo",
+        "id": "w4",
+        "name": "Lauren",
+        "co_requested": "lapicero",
         "use_plan": [],
-        "specialty": "cirujano"
+        "specialty": "biomedico"
     }
 ]

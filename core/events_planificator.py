@@ -16,7 +16,7 @@ class Events_Planificator:
         if Events_Planificator._check_resources(event.personal_requested, event.workers) and Events_Planificator._there_is_specialist_in_charge(event) and Events_Planificator._check_resources(event.resources_requested, event.resources) and Events_Planificator._check_co_requested(event):
             valid = True
             for e in list_event:
-                if (Events_Planificator._conflict_event_begin(e, event) 
+                if (Events_Planificator.conflict_event_begin(e, event) 
                     or abs((event.begin - e.begin).seconds) < 3600) and Events_Planificator.compare_event_resources(e, event):
                     valid = False
                     break
@@ -26,13 +26,13 @@ class Events_Planificator:
 
     # metodo que me dice si dos eventos tienen la misa fecha de inicio
     @staticmethod
-    def _conflict_event_begin(event_1:Event, event_2:Event):
+    def conflict_event_begin(event_1:Event, event_2:Event):
         if event_1.begin == event_2.begin: return True
         return False
     
     # metodo que me dice si dos eventos terminan a la misma vez
     @staticmethod
-    def _conflict_event_end(event_1:Event, event_2:Event):
+    def conflict_event_end(event_1:Event, event_2:Event):
         if event_1.end == event_2.end : return True
         return False
 

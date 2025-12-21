@@ -13,12 +13,28 @@ class Domain:
         self.events: list[Event] = []
         self.workers: list[Worker] = []
         self.resources: list[Resource] = []
+        self.event_to_delete: set[str] = set()
+        self.worker_to_delete: set[str] = set()
+        self.resource_to_delete: set[str] = set()
         if len(Data_saved_loader.load_file_info("events")) > 0:
             self.events = Data_saved_loader.load_file_info("events")
         if len(Data_saved_loader.load_file_info("personal")) > 0:
             self.workers = Data_saved_loader.load_file_info("personal")
         if len(Data_saved_loader.load_file_info("resources")) > 0:
             self.resources = Data_saved_loader.load_file_info("resources")
+    
+    def rebuild_relations(self):
+        events_map = {e.id: e for e in self.events}
+        workers_map = {w.id: w for w in self.workers}
+        resources_map = {r.id: r for r in self.resources}
+
+        for e in self.events:
+            e.workers = [workers_map[w_id] for w_id in e.workers if isinstance(w_id,str) and w_id in workers_map]
+            e.resources = [resources_map[r_id] for r_id in e.resources if isinstance(r_id,str) and r_id in resources_map]
+        for w in self.workers:
+            w.use_plan = [events_map[e_id] for e_id in w.use_plan if isinstance(e_id,str) and e_id in events_map]
+        for r in self.resources:
+            r.use_plan = [events_map[e_id] for e_id in r.use_plan if isinstance(e_id,str) and e_id in events_map]
     
     # funcion que actualiza los eventos y elimina los que ya hayan pasado
     def update_events(self):
@@ -53,9 +69,20 @@ class Domain:
             return Data_saved_loader.load_file_info("resources")
         return []
     # metodo para eliminar un evento
-    def remove_event(self, event_id: str):
-        Data_saved_loader.remove_(self.events, event_id, "events")
-        self.events = Data_saved_loader.load_file_info("events")
+    def remove_item(self, kind:str, item_id: str):
+        if kind == "e" or kind == "event":
+            Data_saved_loader.remove_(self.events, item_id, "events")
+            # self.events = Data_saved_loader.load_file_info("events")
+        if kind == "w" or kind == "worker":
+            Data_saved_loader.remove_(self.workers, item_id, "personal")
+            # self.workers = Data_saved_loader.load_file_info("personal")
+        if kind == "r" or kind == "resource":
+            Data_saved_loader.remove_(self.resources, item_id, "resources")
+            # self.resources = Data_saved_loader.load_file_info("resources")
+        # limpiar los set de objetos a eliminar
+        self.event_to_delete.clear()
+        self.worker_to_delete.clear()
+        self.resource_to_delete.clear()
     # metodo para mostrar detalles de un event | resource | worker
     def show_details(self, id: str, *args):
         if id : 
@@ -106,3 +133,20 @@ class Domain:
                 if item.id.lower() == id.lower():
                     return item
         return None
+    # metodo para ordenar una lista de eventos por fecha de inicio==========================================
+    def sorted_events_by_begin(slef, events_list:list[Event]) -> list[Event]:
+        sorted_list = []
+        if len(events_list) > 1:
+            sorted_list = events_list.sort(key=lambda e: e.begin)
+        return sorted_list
+    # metodo para marcar los objetos que se quieren borrar 
+    def mark_for_delete(self, kind:str, item_id:str):
+        if kind == "e" or kind == "event":
+            self.event_to_delete.add(item_id)
+            self.events = [e for e in self.events if e.id not in self.event_to_delete]
+        elif kind == "w" or kind == "worker":
+            self.worker_to_delete.add(item_id)
+            self.workers = [w for w in self.workers if w.id not in self.worker_to_delete]
+        elif kind == "r" or kind == "resource":
+            self.resource_to_delete.add(item_id)
+            self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]

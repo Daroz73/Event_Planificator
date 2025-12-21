@@ -2,7 +2,6 @@
     {
         "id": "r2",
         "name": "laptop",
-        "type": "material",
         "co_requested": "biomedico",
         "use_plan": []
     },

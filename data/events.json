@@ -9,21 +9,10 @@
         "end": "2025-11-08 09:45:46.691175",
         "is_emergency": "False",
         "workers": [
-            {
-                "id": "w2",
-                "name": "Darian Perez",
-                "co_requested": "electro",
-                "use_plan": [],
-                "specialty": "cardiologo"
-            }
+            "w2"
         ],
         "resources": [
-            {
-                "id": "r2",
-                "name": "laptop",
-                "co_requested": "biomedico",
-                "use_plan": []
-            }
+            "r2"
         ]
     },
     {
@@ -40,53 +29,15 @@
         "end": "2025-11-09 16:00:22.334819",
         "is_emergency": "False",
         "workers": [
-            {
-                "id": "w7",
-                "name": "Ernesto Castillo",
-                "co_requested": "cuchilla",
-                "use_plan": [],
-                "specialty": "cirujano"
-            },
-            {
-                "id": "E9",
-                "name": "Alejandra Vazques",
-                "co_requested": "lapicero",
-                "use_plan": [],
-                "specialty": "enfermero"
-            },
-            {
-                "id": "E10",
-                "name": "Elber Galarga",
-                "co_requested": "recetas",
-                "use_plan": [],
-                "specialty": "enfermero"
-            }
+            "w7",
+            "w9",
+            "w10"
         ],
         "resources": [
-            {
-                "id": "r1",
-                "name": "Quirofano",
-                "co_requested": "enfermero",
-                "use_plan": []
-            },
-            {
-                "id": "r5",
-                "name": "cuchilla",
-                "co_requested": "cirujano",
-                "use_plan": []
-            },
-            {
-                "id": "r3",
-                "name": "lapicero",
-                "co_requested": "Equipo",
-                "use_plan": []
-            },
-            {
-                "id": "r10",
-                "name": "recetas",
-                "co_requested": "Sala",
-                "use_plan": []
-            }
+            "r1",
+            "r5",
+            "r3",
+            "r10"
         ]
     }
 ]

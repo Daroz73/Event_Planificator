@@ -13,8 +13,8 @@ class Event:
     begin: datetime
     end: datetime
     is_emergency: bool
-    workers: list[Worker] = field(default_factory = list)
-    resources: list[Resource] = field(default_factory = list)
+    workers: list[str] = field(default_factory = list)
+    resources: list[str] = field(default_factory = list)
 
     def show_details(self, *args) -> str:
         # diccionario con los valores de los posibles parametros a mostrar

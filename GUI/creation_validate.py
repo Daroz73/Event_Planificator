@@ -6,7 +6,7 @@ class Creation_Validate:
     # metodo que crea un dialog que indica que se realizo una accion con exito
     @staticmethod
     def validate_action(page:ft.Page, title: str, text: str):
-        dialog = Creation_Validate._create_dialog(title, text)
+        dialog = Creation_Validate._create_dialog(page, title, text)
         dialog.open = True
         page.add(dialog)
     @staticmethod
