@@ -58,7 +58,9 @@ class Domain:
             self.resources = Data_saved_loader.load_file_info("resources")
     # metodo que agenda un evento
     def _add_event(self, event:Event):
-        Events_Planificator.Agg_Event(self.events, event)
+        Events_Planificator.add_resource(self.workers, self.resources, self.events, event)
+        Events_Planificator.Agg_Event(self.workers, self.resources, self.events, event)
+        self.events = Data_saved_loader.load_file_info("events")
     # metodo para listar los eventos
     def list_(self, string:str) -> list[Event]:
         if string.lower() == "events":
@@ -135,10 +137,7 @@ class Domain:
         return None
     # metodo para ordenar una lista de eventos por fecha de inicio==========================================
     def sorted_events_by_begin(slef, events_list:list[Event]) -> list[Event]:
-        sorted_list = []
-        if len(events_list) > 1:
-            sorted_list = events_list.sort(key=lambda e: e.begin)
-        return sorted_list
+        return sorted(events_list, key=lambda x: x.begin)
     # metodo para marcar los objetos que se quieren borrar 
     def mark_for_delete(self, kind:str, item_id:str):
         if kind == "e" or kind == "event":

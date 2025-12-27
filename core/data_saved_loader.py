@@ -100,8 +100,8 @@ class Data_saved_loader:
                 "begin":f"{event.begin}",
                 "end":f"{event.end}",
                 "is_emergency":f"{event.is_emergency}",
-                "workers":[w.id for w in event.workers],
-                "resources":[r.id for r in event.resources]
+                "workers":[w for w in event.workers],
+                "resources":[r for r in event.resources]
             }
         return new_event
     

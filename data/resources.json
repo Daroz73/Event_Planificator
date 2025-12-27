@@ -14,13 +14,19 @@
     {
         "id": "r4",
         "name": "geringa",
-        "co_requested": "nurse",
+        "co_requested": "enfermero",
         "use_plan": []
     },
     {
         "id": "r5",
         "name": "microscopio",
-        "co_requested": "nurse",
+        "co_requested": "enfermero",
+        "use_plan": []
+    },
+    {
+        "id": "r1",
+        "name": "Camilla",
+        "co_requested": "enfermero",
         "use_plan": []
     }
 ]

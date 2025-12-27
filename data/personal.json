@@ -40,5 +40,12 @@
         "co_requested": "lapicero",
         "use_plan": [],
         "specialty": "biomedico"
+    },
+    {
+        "id": "w6",
+        "name": "Jose",
+        "co_requested": "Camilla",
+        "use_plan": [],
+        "specialty": "enfermero"
     }
 ]

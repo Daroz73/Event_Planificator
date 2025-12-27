@@ -7,7 +7,7 @@ class Resource:
     id: str
     name: str
     co_requested: str
-    use_plan: list = field(default_factory = list)
+    use_plan: list[str] = field(default_factory = list)
 
     # funcion para mostrar los detalles de los resources
     def _show_details(self, *args) -> str:

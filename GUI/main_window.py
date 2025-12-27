@@ -27,7 +27,7 @@ def main(page: ft.Page):
                     # Usa el método externo Create_Utils
                     ft.MenuItemButton(
                         content=ft.Text("Create Event"),
-                        on_click=lambda e: Create_Utils.create_event(page, navegation_bar)
+                        on_click=lambda e: Create_Utils.create_event(page, domain, navegation_bar)
                     ),
                     # Usa el método externo Visual_Utils
                     ft.MenuItemButton(

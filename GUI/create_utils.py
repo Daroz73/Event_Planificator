@@ -12,7 +12,7 @@ from core.events_planificator import Events_Planificator
 
 class Create_Utils:
     @staticmethod
-    def create_event(page: ft.Page, navegation_bar):
+    def create_event(page: ft.Page, dom:Domain, navegation_bar):
         page.clean()
         page.add(navegation_bar)
 
@@ -102,7 +102,7 @@ class Create_Utils:
             resource_col,
             is_emergency,
             ft.ElevatedButton("Create Event",
-                              on_click=lambda e: Create_Utils._create_event(page, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, b_sec.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, e_sec.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
+                              on_click=lambda e: Create_Utils._create_event(page, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, b_sec.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, e_sec.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
             )
         ],
             scroll="auto",
@@ -156,16 +156,17 @@ class Create_Utils:
         page.add(column)
 # == Metodos que desencadena el evento de crear event, worker o resource ==============================
     @staticmethod
-    def _create_event(page: ft.Page, name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, b_sec, e_y, e_m, e_d, e_h, e_min, e_sec, is_emergency, personal_requested, resources_requested):
-        dom = Domain()
+    def _create_event(page: ft.Page, dom:Domain, name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, b_sec, e_y, e_m, e_d, e_h, e_min, e_sec, is_emergency, personal_requested, resources_requested):
         id = dom.ids_generator("e")
         begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, b_sec)
         end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, e_sec)
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
-        Events_Planificator.add_resource(event)
-        print(event)
+        dom.rebuild_relations()
+        # Events_Planificator.add_resource(dom.workers, dom.resources, dom.events, event)
+        # if not ok:
+        #     return # no se continua si no se pudieron agregar los recursos 
         dom.add(event)
-    # ==========
+    # =====================================================================================
     @staticmethod
     def _create_worker(page:ft.Page, name:str, co_requested:str, speciality: str):
         dom = Domain()
