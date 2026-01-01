@@ -41,7 +41,7 @@ def main(page: ft.Page):
                 controls=[
                     ft.MenuItemButton(
                         content=ft.Text("Add Worker"),
-                        on_click= lambda e: Create_Utils.add_worker(page, navegation_bar)
+                        on_click= lambda e: Create_Utils.add_worker(page, domain, navegation_bar)
                         ),
                     ft.MenuItemButton(
                         content=ft.Text("View Worker"),
@@ -54,7 +54,7 @@ def main(page: ft.Page):
                 controls=[
                     ft.MenuItemButton(
                         content=ft.Text("By Resource"),
-                        on_click= lambda e: Create_Utils.add_resource(page, navegation_bar)
+                        on_click= lambda e: Create_Utils.add_resource(page, domain, navegation_bar)
                         ),
                     ft.MenuItemButton(
                         content=ft.Text("View Resources"),

@@ -149,3 +149,34 @@ class Domain:
         elif kind == "r" or kind == "resource":
             self.resource_to_delete.add(item_id)
             self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]
+    # metodo que devuelve todas las especialidades posibles de los trabajadores=========================================
+    def get_specialities(self) -> set[str]:
+        return {"Alergología", "Algología", "Anestesiología", "Angiología", "Cardiología"
+                , "Cirugía general", "Cirugía cardíaca", "Cirugía torácica", "Cirugía vascular"
+                , "Cirugía oral y maxilofacial", "Cirugía plástica", "Cirugía pediátrica"
+                , "Cirugía ortopédica y traumatología", "Coloproctología", "Dermatología"
+                , "Endocrinología", "Estomatología", "Gastroenterología", "Geriatría", "Genética médica"
+                , "Hematología", "Inmunología", "Enfermedades infecciosas", "Medicina interna"
+                , "Medicina de emergencia", "Medicina familiar", "Medicina física y rehabilitación"
+                , "Medicina nuclear", "Nefrología", "Neonatología", "Neumología", "Neurología"
+                , "Neurocirugía", "Obstetricia", "Ginecología", "Oftalmología", "Oncología"
+                , "Otorrinolaringología", "Pediatría", "Psiquiatría", "Psicología clínica", "Radiología"
+                , "Reumatología", "Urología", "Análisis clínicos", "Anatomía patológica", "Bioquímica clínica"
+                , "Microbiología y parasitología", "Neurofisiología clínica", "Farmacología clínica"
+                , "Rehabilitación", "Fisioterapia", "Odontología", "Emergenciología","Enfermería","Chofer"
+                }
+    def get_resources(self):
+        return {
+        "jeringas","recetas","espéculo","guantes desechables","mascarillas","batas desechables","gasas estériles",
+        "vendas","agujas desechables","pinzas hemostáticas","tijeras quirúrgicas","portaagujas","bisturí",
+        "hojas de bisturí","antisépticos","soluciones desinfectantes","esparadrapos","apósitos","ambú","collarín cervical",
+        "termómetros","estetoscopios","tensiómetros","pulsioxímetros","desfibriladores",
+        "concentradores de oxígeno","máquinas de succión","bolsas de esterilización","máquinas de rayos X",
+        "escáneres de resonancia magnética","tomógrafos computarizados (TAC)","ecógrafos","máquinas de electrocardiograma (ECG)",
+        "monitores multiparamétricos","desfibriladores","ventiladores mecánicos","bombas de infusión",
+        "máquinas de diálisis","máquinas de anestesia","mesas quirúrgicas","lámparas quirúrgicas","esterilizadores",
+        "concentradores de oxígeno","máquinas de succión","pulsioxímetros","termómetros digitales","glucómetros",
+        "incubadoras neonatales","bilirrubinómetros","equipos de visualización de venas","sillas de ruedas",
+        "camas hospitalarias","ambulancias","equipos de transporte de pacientes","centrifugas para análisis de muestras",
+        "analizadores bioquímicos","microscopios","espectrómetros"
+        }
