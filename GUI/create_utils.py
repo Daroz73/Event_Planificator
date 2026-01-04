@@ -9,6 +9,7 @@ from core.events import Event
 from core.worker import Worker
 from core.resource import Resource
 from core.events_planificator import Events_Planificator
+from datetime import timedelta
 
 class Create_Utils:
     @staticmethod
@@ -36,38 +37,35 @@ class Create_Utils:
             # on_blur=lambda e: Creation_Validate.hide_specialities_menu(page, specialist_menu) 
             )
 
-        b_y = ft.TextField(label="Year: ", expand=1)
-        b_m = ft.TextField(label="Month: ", expand=1)
-        b_d = ft.TextField(label="Day: ", expand=1)
-        b_h = ft.TextField(label="Hours: ", expand=1)
-        b_min = ft.TextField(label="Minutes: ", expand=1)
-        b_sec = ft.TextField(label="Seconds: ", expand=1)
+        months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre"
+                  ,"Noviembre", "Diciembre"]
+        hours = [f"{i:02d}" for i in range(24)]
+        minutes = [f"{i:02d}" for i in range(60)]
+
+        b_y = ft.TextField(label="Year: ", width=90)
+        b_m = ft.Dropdown(label="Month: ", options=[ft.dropdown.Option(m) for m in months], width=150)
+        b_d = ft.TextField(label="Day: ", width=70)
+        b_h = ft.Dropdown(label="Hours: ", options=[ft.dropdown.Option(h) for h in hours])
+        b_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes])
 
         begin = ft.Row([
-            b_y,
-            b_m,
-            b_d,
-            b_h,
-            b_min,
-            b_sec
+            b_y,b_m,b_d,
+            ft.Text("-"),
+            b_h,b_min
         ],
         expand=True
         )
 
-        e_y = ft.TextField(label="Year: ", expand=1)
-        e_m = ft.TextField(label="Month: ", expand=1)
-        e_d = ft.TextField(label="Day: ", expand=1)
-        e_h = ft.TextField(label="Hours: ", expand=1)
-        e_min = ft.TextField(label="Minutes: ", expand=1)
-        e_sec = ft.TextField(label="Seconds: ", expand=1)
+        e_y = ft.TextField(label="Year: ", width=90)
+        e_m = ft.Dropdown(label="Month: ", options=[ft.dropdown.Option(m) for m in months])
+        e_d = ft.TextField(label="Day: ", width=70)
+        e_h = ft.Dropdown(label="Hours: ", options=[ft.dropdown.Option(h) for h in hours], width=150)
+        e_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes])
 
         end = ft.Row([
-            e_y,
-            e_m,
-            e_d,
-            e_h,
-            e_min,
-            e_sec
+            e_y,e_m,e_d,
+            ft.Text("-"),
+            e_h,e_min
         ],
         expand=True
         )
@@ -134,6 +132,35 @@ class Create_Utils:
             ])
         resource_col.controls.append(resource_row)
 
+        duration_hours = ft.Dropdown(
+            label="Duration (hours)",
+            width=150,
+            options=[ft.dropdown.Option(str(i)) for i in range(13)]
+        )
+        duration_minutes = ft.Dropdown(
+            label="Duration (minutes)",
+            width=150,
+            options=[ft.dropdown.Option(str(i)) for i in range(60)]
+        )
+        duration_row = ft.Row(
+            [
+                duration_hours,
+                duration_minutes
+            ],
+            spacing=20
+        )
+        btn_find_slot = ft.ElevatedButton(
+            "Find Slot",
+            icon = ft.Icons.SEARCH,
+            on_click=lambda e: Create_Utils._find_avialable_slot(page=page, dom=dom, personal_col=personal_col
+                                                                , resource_col=resource_col, duration_h=duration_hours.value
+                                                                , duration_min=duration_minutes.value, b_y=b_y, b_m=b_m
+                                                                , b_d=b_d, b_h=b_h, b_min=b_min, e_y=e_y, e_m=e_m, e_d=e_d
+                                                                , e_h=e_h, e_min=e_min
+                                                                )
+        )
+
+
         is_emergency = ft.Checkbox(label="Is Emergency?")
 
         column = ft.Column([
@@ -144,13 +171,16 @@ class Create_Utils:
             begin,
             ft.Text("End Date: "),
             end,
+            ft.Text("Event Duration (for find a slot, opcional)"),
+            duration_row,
+            btn_find_slot,
             ft.Text("Ask the personal requested: "),
             personal_col,
             ft.Text("Resources requested: "),
             resource_col,
             is_emergency,
             ft.ElevatedButton("Create Event",
-                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, ctr, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, b_sec.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, e_sec.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
+                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, ctr, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
             )
         ],
             scroll="auto",
@@ -202,7 +232,7 @@ class Create_Utils:
             worker_role,
             worker_menu_itelligent,
             ft.ElevatedButton("Add Worker",
-                              on_click=lambda e: Create_Utils._create_worker(page, worker_name.value, worker_co_requested.value, worker_role.value))
+                              on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value, worker_co_requested.value, worker_role.value, worker_co_requested, worker_role))
         ])
 
         page.add(column)
@@ -245,33 +275,39 @@ class Create_Utils:
             resource_co_requested,
             co_requested_menu,
             ft.ElevatedButton("Add Resource",
-                              on_click = lambda e: Create_Utils._create_resource(page, resource_name.value, resource_co_requested.value)
+                              on_click = lambda e: Create_Utils._create_resource(page, dom, resource_name.value, resource_co_requested.value, resource_name, resource_co_requested)
                               )
         ])
         page.add(column)
 # == Metodos que desencadena el evento de crear event, worker o resource ==============================
     @staticmethod
-    def _create_event(page: ft.Page, ctr, dom:Domain, name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, b_sec, e_y, e_m, e_d, e_h, e_min, e_sec, is_emergency, personal_requested, resources_requested):
-        if not Creation_Validate.validate_speciality(page, specialist_in_charge, dom.get_specialities(), ctr):
+    def _create_event(page: ft.Page, ctr, dom:Domain, name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, e_y, e_m, e_d, e_h, e_min, is_emergency, personal_requested, resources_requested):
+        if not Creation_Validate.validate_(page, specialist_in_charge, dom.get_specialities(), ctr):
             return
-        begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, b_sec)
-        end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, e_sec)
+        begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, 0)
+        end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, 0)
         id = dom.ids_generator("e")
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
         dom.rebuild_relations()
         dom.add(event)
     # =====================================================================================
     @staticmethod
-    def _create_worker(page:ft.Page, name:str, co_requested:str, speciality: str):
-        dom = Domain()
+    def _create_worker(page:ft.Page, dom: Domain, name:str, co_requested:str, speciality: str, co_requested_ctr:ft.TextField, speciality_ctr:ft.TextField):
+        if not Creation_Validate.validate_(page, co_requested, dom.get_resources(), co_requested_ctr):
+            return
+        if not Creation_Validate.validate_(page, speciality, dom.get_specialities(), speciality_ctr):
+            return
         id = dom.ids_generator("w")
         worker = Worker(id, name, co_requested,[], speciality)
         dom.add(worker)
         Creation_Validate.validate_action(page, "Added Worker", "The worker had added succefully")
-    # ============
+    # =======================================================================================================
     @staticmethod
-    def _create_resource(page:ft.Page, name:str, co_requested:str):
-        dom = Domain()
+    def _create_resource(page:ft.Page, dom:Domain, name:str, co_requested:str, ctr_name:ft.TextField, crt_co_requested:ft.TextField):
+        if not Creation_Validate.validate_(page, name, dom.get_resources(), ctr_name):
+            return
+        if not Creation_Validate.validate_(page, co_requested, dom.get_specialities(), crt_co_requested):
+            return
         id = dom.ids_generator("r")
         resource = Resource(id, name, co_requested, [])
         dom.add(resource)
@@ -337,3 +373,36 @@ class Create_Utils:
                         value = 0
                     extracted_dict[key] = value
         return extracted_dict
+    # ========================================================================================================
+    # funcion para buscar hueco
+    @staticmethod
+    def _find_avialable_slot(page:ft.Page, dom:Domain, personal_col:ft.Column, resource_col:ft.Column
+                            , duration_h, duration_min, b_y, b_m, b_d, b_h, b_min
+                            , e_y, e_m, e_d, e_h, e_min):
+        if not duration_h or not duration_min:
+            Creation_Validate.validate_action(page, "Missing data", "Debe iniciar la duracion")
+            return
+
+        duration = timedelta(hours=int(duration_h), minutes=int(duration_min))
+        
+        personal_requested = Create_Utils._get_values_from_column(personal_col)
+        resource_requested = Create_Utils._get_values_from_column(resource_col)
+
+        if not personal_requested and not resource_requested:
+            Creation_Validate.validate_action(page, "No requeriments", "Debe iniciar Personal o recursos")
+            return
+        begin, end = dom.find_next_avialable_slot(personal_requested, resource_requested, duration)
+
+        b_y.value = str(begin.year)
+        b_m.value = begin.strftime("%B").capitalize()
+        b_d.value = str(begin.day)
+        b_h.value = f"{begin.hour:02d}"
+        b_min.value = f"{begin.minute:02d}"
+
+        e_y.value = str(end.year)
+        e_m.value = end.strftime("%B").capitalize()
+        e_d.value = str(end.day)
+        e_h.value = f"{end.hour:02d}"
+        e_min.value = f"{end.minute:02d}"
+
+        page.update()

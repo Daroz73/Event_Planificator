@@ -1,5 +1,4 @@
 import flet as ft
-from flet import Row
 import sys, os
 # Importar core
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

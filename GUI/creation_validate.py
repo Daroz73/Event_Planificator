@@ -13,12 +13,13 @@ class Creation_Validate:
     def validate_date(page: ft.Page, year, month, day, hour, minute, seconds) -> datetime:
         try:
             year = int(year)
-            month = int(month)
+            month = Creation_Validate._month_to_num(month)
             day = int(day)
             hour = int(hour)
             minute = int(minute)
             seconds = int(seconds)
-            return datetime(year, month, day, hour, minute, seconds)
+            if datetime(year, month, day, hour, minute, seconds) > datetime.now():
+                return datetime(year, month, day, hour, minute, seconds)
         except Exception:
             dialog = Creation_Validate._create_dialog(page, "Invalid Date", "The arg are not valid")
             dialog.open = True
@@ -75,12 +76,12 @@ class Creation_Validate:
     # ======================================================================================
     # metodo para validar si la especialidad introducida es correcta
     @staticmethod
-    def validate_speciality(page:ft.Page, specialty:str ,specialities:set[str], control) -> bool:
+    def validate_(page:ft.Page, field_name:str ,set:set[str], control) -> bool:
         
-        if specialty not in specialities:
+        if field_name not in set:
             control.border_color = ft.Colors.RED
             # mensaje que se muestra al pasar el mouse por encima del campo
-            control.tooltip = "Speciality not valid"
+            control.tooltip = "Input not valid"
             page.update()
             return False
         else:
@@ -95,3 +96,11 @@ class Creation_Validate:
         speciality_menu.visible = False
         page.update()
     # ==========================================================================================
+    # funcion para convertir el nombre del mes a un numero
+    @staticmethod
+    def _month_to_num(month:str) -> int:
+        months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre"
+                  ,"Noviembre", "Diciembre"]
+        for i in range(len(months)):
+            if months[i].lower() == month.lower():
+                return i + 1

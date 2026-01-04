@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from core.resource import Resource
 from core.worker import Worker
 from core.events import Event
@@ -180,3 +180,54 @@ class Domain:
         "camas hospitalarias","ambulancias","equipos de transporte de pacientes","centrifugas para análisis de muestras",
         "analizadores bioquímicos","microscopios","espectrómetros"
         }
+    # ====================================================================================================
+    # Funcion para buscar huecos
+    def find_next_avialable_slot(self, personal_req:dict, resource_req:dict, duration:timedelta,step_minutes: int = 15) ->tuple[datetime, datetime]:
+        
+        current_start = datetime.now().replace(second=0, microsecond=0)
+        
+        events = sorted(self.events, key=lambda e: e.begin)
+
+        while True:
+            candidate_end = current_start + duration
+
+            conflict = False
+
+            for e in events:
+                if e.end <= current_start or e.begin >= candidate_end:
+                    continue
+                for role, qty in personal_req.items():
+                    if role in e.personal_requested:
+                        conflict = True
+                        break
+                for res, qty in resource_req.items():
+                    if res in e.resources_requested:
+                        conflict = True
+                        break
+                if conflict:
+                    break
+            if not conflict:
+                return current_start, candidate_end
+            current_start += timedelta(minutes=step_minutes)
+    # ===================================================================================================
+    # funcion para detectar el solapamiento de errores
+    def _overlaps(start1, end1, start2, end2):
+        # True si los intervalos se solapan en el tiempo
+        return start1 < end2 and start2 < end1
+    # funcion para validar si un hueco es valido
+    def _is_valid_slot(self, start:datetime, end:datetime, personal_req:dict[str, int], resources_req:dict[str,int]):
+        for e in self.events:
+            # revisamos conflicto de fechas
+            if not self._overlaps(start, end, e.begin, e.end):
+                continue
+            # revisamos conflicto de personal
+            for role, needed in personal_req.items():
+                used = e.personal_requested.get(role, 0)
+                if used >= needed:
+                    return False
+            # revisamos conflicto de recursos
+            for res, needed in resources_req.items():
+                used = e.resources_requested.get(res, 0)
+                if used >= needed:
+                    return False
+        return True 
