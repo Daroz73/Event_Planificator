@@ -13,9 +13,14 @@ class Domain:
         self.events: list[Event] = []
         self.workers: list[Worker] = []
         self.resources: list[Resource] = []
+        # ----------------------------------
         self.event_to_delete: set[str] = set()
         self.worker_to_delete: set[str] = set()
         self.resource_to_delete: set[str] = set()
+        # -----------------------------------
+        self.pending_events: list[Event] = []
+        self.pending_workers: list[Worker] = []
+        self.pending_resources: list[Resource] = []
         if len(Data_saved_loader.load_file_info("events")) > 0:
             self.events = Data_saved_loader.load_file_info("events")
         if len(Data_saved_loader.load_file_info("personal")) > 0:
@@ -49,13 +54,16 @@ class Domain:
     # metodo para guardar permanetemete cualqueir elemento creado
     def add(self, item: Event | Worker | Resource):
         if isinstance(item, Event):
-            self._add_event(item)
+            self.pending_events.append(item)
+            # self._add_event(item)
         elif isinstance(item, Worker):
-            Data_saved_loader.append_(item, "personal")
-            self.workers = Data_saved_loader.load_file_info("personal")
+            self.pending_workers.append(item)
+            # Data_saved_loader.append_(item, "personal")
+            # self.workers = Data_saved_loader.load_file_info("personal")
         else:
-            Data_saved_loader.append_(item, "resources")
-            self.resources = Data_saved_loader.load_file_info("resources")
+            self.pending_resources.append(item)
+            # Data_saved_loader.append_(item, "resources")
+            # self.resources = Data_saved_loader.load_file_info("resources")
     # metodo que agenda un evento
     def _add_event(self, event:Event):
         Events_Planificator.add_resource(self.workers, self.resources, self.events, event)
@@ -149,6 +157,37 @@ class Domain:
         elif kind == "r" or kind == "resource":
             self.resource_to_delete.add(item_id)
             self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]
+    # metodo para guardar los eventos creados en las listas temporales antes de ser guardados en los json=====
+    def save_pending(self):
+        # Guardar Eventos
+        for event in self.pending_events:
+            Events_Planificator.add_resource(
+                self.workers, self.resources, self.events, event
+            )
+            Events_Planificator.Agg_Event(
+                self.workers, self.resources, self.events, event
+            )
+            Data_saved_loader.append_(event, "events")
+            self.events.append(event)
+        self.persist_workers_and_resources()
+        # Guardar worker
+        for worker in self.pending_workers:
+            Data_saved_loader.append_(worker, "personal")
+            self.workers.append(worker)
+        # Guardar resource
+        for resource in self.pending_resources:
+            Data_saved_loader.append_(resource, "resources")
+            self.resources.append(resource)
+        # limpiamos las listas
+        self.pending_events.clear()
+        self.pending_workers.clear()
+        self.pending_resources.clear()
+    
+    # metodo para hacer que persistan los cambios de los trabajadores y recursos=======================
+    def persist_workers_and_resources(self):
+        Data_saved_loader.update_all(self.workers, "personal")
+        Data_saved_loader.update_all(self.resources, "resources")
+
     # metodo que devuelve todas las especialidades posibles de los trabajadores=========================================
     def get_specialities(self) -> set[str]:
         return {"Alergología", "Algología", "Anestesiología", "Angiología", "Cardiología"
@@ -168,9 +207,9 @@ class Domain:
     def get_resources(self):
         return {
         "jeringas","recetas","espéculo","guantes desechables","mascarillas","batas desechables","gasas estériles",
-        "vendas","agujas desechables","pinzas hemostáticas","tijeras quirúrgicas","portaagujas","bisturí",
+        "vendas","agujas desechables","pinzas hemostáticas","tijeras quirúrgicas","portaagujas","bisturí","laptop",
         "hojas de bisturí","antisépticos","soluciones desinfectantes","esparadrapos","apósitos","ambú","collarín cervical",
-        "termómetros","estetoscopios","tensiómetros","pulsioxímetros","desfibriladores",
+        "termómetros","estetoscopios","tensiómetros","pulsioxímetros","desfibriladores","lapiceros",
         "concentradores de oxígeno","máquinas de succión","bolsas de esterilización","máquinas de rayos X",
         "escáneres de resonancia magnética","tomógrafos computarizados (TAC)","ecógrafos","máquinas de electrocardiograma (ECG)",
         "monitores multiparamétricos","desfibriladores","ventiladores mecánicos","bombas de infusión",
@@ -178,7 +217,7 @@ class Domain:
         "concentradores de oxígeno","máquinas de succión","pulsioxímetros","termómetros digitales","glucómetros",
         "incubadoras neonatales","bilirrubinómetros","equipos de visualización de venas","sillas de ruedas",
         "camas hospitalarias","ambulancias","equipos de transporte de pacientes","centrifugas para análisis de muestras",
-        "analizadores bioquímicos","microscopios","espectrómetros"
+        "analizadores bioquímicos","Microscopios","Espectrómetros","Quirófano"
         }
     # ====================================================================================================
     # Funcion para buscar huecos

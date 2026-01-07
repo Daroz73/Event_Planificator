@@ -18,9 +18,9 @@
             "enfermero": 2
         },
         "resources_requested": {
-            "Quirofano": 1
+            "Quirófano": 1
         },
-        "specialist_in_charge": "enfermero",
+        "specialist_in_charge": "Enfermería",
         "begin": "2025-11-09 10:00:22.334818",
         "end": "2025-11-09 16:00:22.334819",
         "is_emergency": "False",

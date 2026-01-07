@@ -2,31 +2,39 @@
     {
         "id": "r2",
         "name": "laptop",
-        "co_requested": "biomedico",
+        "co_requested": "Psiquiatría",
         "use_plan": []
     },
     {
         "id": "r3",
-        "name": "electro",
-        "co_requested": "cardiologo",
+        "name": "máquinas de electrocardiograma (ECG)",
+        "co_requested": "Cardiología",
         "use_plan": []
     },
     {
         "id": "r4",
-        "name": "geringa",
-        "co_requested": "enfermero",
+        "name": "jeringas",
+        "co_requested": "Enfermería",
         "use_plan": []
     },
     {
         "id": "r5",
-        "name": "microscopio",
-        "co_requested": "enfermero",
+        "name": "microscopios",
+        "co_requested": "Enfermería",
         "use_plan": []
     },
     {
         "id": "r1",
-        "name": "Camilla",
-        "co_requested": "enfermero",
+        "name": "equipos de transporte de pacientes",
+        "co_requested": "Enfermería",
         "use_plan": []
+    },
+    {
+        "id": "r6",
+        "name": "estetoscopios",
+        "co_requested": "Ginecología",
+        "use_plan": [
+            "e1"
+        ]
     }
 ]

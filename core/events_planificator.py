@@ -98,7 +98,7 @@ class Events_Planificator:
         return True
     # Metodo auxiliar para agregar un recurso a un evento
     @staticmethod
-    def _add_resource_to_event(event: Event, resource: Resource, events:list[Event]):
+    def _add_resource_to_event(event: Event, resource: Resource|Worker, events:list[Event]):
         if not resource.use_plan:
             if isinstance(resource, Worker):
                 event.workers.append(resource.id)
@@ -106,11 +106,11 @@ class Events_Planificator:
                 event.resources.append(resource.id)
             resource.use_plan.append(event.id)
             return 
-        last_event = resource.use_plan[-1].end
-        last_event = next((e for e in events if e.id == last_event), None)
+        last_event_id = resource.use_plan[-1].end
+        last_event = next((e for e in events if e.id == last_event_id), None)
         if last_event is None:
             return
-        if abs(last_event.end - event.begin).total_seconds() >= 3600:
+        if abs((event.begin - last_event.end).total_seconds()) >= 3600:
             if isinstance(resource, Worker):
                 event.workers.append(resource.id)
             else:

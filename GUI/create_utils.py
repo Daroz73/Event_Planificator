@@ -88,7 +88,11 @@ class Create_Utils:
             on_click=lambda e: Creation_Validate.show_menu(e, page, specialist_option, specialist_menu_personal_requested)
             # on_blur=lambda e:
             )
-        count = ft.TextField(label="Count: ")
+        count = ft.Dropdown(
+            label="Count: ",
+            options=[ft.dropdown.Option(i) for i in range(1,51)],
+            width=150
+            )
         btn_add_specialist = ft.FloatingActionButton(
             icon=ft.Icons.ADD,
             on_click=lambda e: Create_Utils._agg_row(page, personal_col, "Specialist: ", specialist_option)
@@ -119,7 +123,11 @@ class Create_Utils:
             on_change=lambda e: Creation_Validate.filter_options(e, page, resources_options, resources_menu),
             on_focus=lambda e: Creation_Validate.show_menu(e, page, resources_options, resources_menu)
         )
-        r_count = ft.TextField(label="Count: ")
+        r_count = ft.Dropdown(
+            label="Count: ",
+            options=[ft.dropdown.Option(i) for i in range(1, 51)],
+            width=150
+            )
         btn_add_resource = ft.FloatingActionButton(
             icon=ft.Icons.ADD,
             on_click=lambda e: Create_Utils._agg_row(page, resource_col, "Resource: ", resources_options)
@@ -162,7 +170,15 @@ class Create_Utils:
 
 
         is_emergency = ft.Checkbox(label="Is Emergency?")
-
+        create_event_btn = ft.ElevatedButton("Create Event",
+                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, ctr, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
+            )
+        save_event_btn = ft.ElevatedButton(
+            "Save",
+            on_click=lambda e: (dom.save_pending(), 
+                                Creation_Validate.validate_action(page,"Saved","Events saved successfully")
+                                )
+        )
         column = ft.Column([
             event_name,
             specialist_in_charge,
@@ -179,9 +195,8 @@ class Create_Utils:
             ft.Text("Resources requested: "),
             resource_col,
             is_emergency,
-            ft.ElevatedButton("Create Event",
-                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, ctr, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
-            )
+            create_event_btn,
+            save_event_btn
         ],
             scroll="auto",
             expand=True)
@@ -224,15 +239,23 @@ class Create_Utils:
             on_focus=lambda e: Creation_Validate.show_menu(e, page, worker_specialities, worker_menu_itelligent),
             # on_blur=lambda e: Creation_Validate.hide_specialities_menu(page, worker_menu_itelligent)
         )
-
+        add_worker_btn = ft.ElevatedButton("Add Worker",
+                              on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value, worker_co_requested.value, worker_role.value, worker_co_requested, worker_role)
+                            )
+        save_workers_bts = ft.ElevatedButton(
+            "Save",
+            on_click=lambda e: (dom.save_pending(), 
+                    Creation_Validate.validate_action(page,"Saved","Workers saved successfully")
+                    )
+        )
         column = ft.Column([
             worker_name,
             worker_co_requested,
             worker_co_requested_menu,
             worker_role,
             worker_menu_itelligent,
-            ft.ElevatedButton("Add Worker",
-                              on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value, worker_co_requested.value, worker_role.value, worker_co_requested, worker_role))
+            add_worker_btn,
+            save_workers_bts
         ])
 
         page.add(column)
@@ -268,15 +291,22 @@ class Create_Utils:
             on_change=lambda e: Creation_Validate.filter_options(e, page, co_requested_option, co_requested_menu),
             on_focus=lambda e: Creation_Validate.show_menu(e, page, co_requested_option, co_requested_menu)    
         )
-
+        add_resource_btn = ft.ElevatedButton("Add Resource",
+                              on_click = lambda e: Create_Utils._create_resource(page, dom, resource_name.value, resource_co_requested.value, resource_name, resource_co_requested)
+                            )
+        save_resources_btn = ft.ElevatedButton(
+            "Save",
+            on_click=lambda e: (dom.save_pending(), 
+                                Creation_Validate.validate_action(page,"Saved","Resource saved successfully")
+                                )
+        )
         column = ft.Column([
             resource_name,
             resopurces_names_menu,
             resource_co_requested,
             co_requested_menu,
-            ft.ElevatedButton("Add Resource",
-                              on_click = lambda e: Create_Utils._create_resource(page, dom, resource_name.value, resource_co_requested.value, resource_name, resource_co_requested)
-                              )
+            add_resource_btn,
+            save_resources_btn
         ])
         page.add(column)
 # == Metodos que desencadena el evento de crear event, worker o resource ==============================
@@ -334,7 +364,11 @@ class Create_Utils:
             on_change=lambda e: Creation_Validate.filter_options(e, page, speciality_option, e.control.data["menu"]),
             on_focus=lambda e: Creation_Validate.show_menu(e, page, speciality_option, e.control.data["menu"])
         )
-        second_item = ft.TextField(label="Count: ")
+        second_item = ft.Dropdown(
+            label="Count: ",
+            options=[ft.dropdown.Option(i) for i in range(1,51)],
+            width=150
+            )
         new_row.controls = [
             first_item,
             menu_container,
@@ -363,13 +397,15 @@ class Create_Utils:
             if isinstance(row, ft.Row):
                 values = []
                 for control in row.controls:
-                    if isinstance(control, ft.TextField):
+                    if isinstance(control, ft.TextField) or isinstance(control, ft.Dropdown):
+                        if control.value is None:
+                            continue
                         values.append(control.value)
                 if len(values) == 2:
                     key = values[0]
                     try:
                         value = int(values[1])
-                    except ValueError:
+                    except (ValueError, TypeError):
                         value = 0
                     extracted_dict[key] = value
         return extracted_dict
