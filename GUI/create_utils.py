@@ -45,8 +45,8 @@ class Create_Utils:
         b_y = ft.TextField(label="Year: ", width=90)
         b_m = ft.Dropdown(label="Month: ", options=[ft.dropdown.Option(m) for m in months], width=150)
         b_d = ft.TextField(label="Day: ", width=70)
-        b_h = ft.Dropdown(label="Hours: ", options=[ft.dropdown.Option(h) for h in hours])
-        b_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes])
+        b_h = ft.Dropdown(label="Hours: ", options=[ft.dropdown.Option(h) for h in hours], width=150)
+        b_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes], width=150)
 
         begin = ft.Row([
             b_y,b_m,b_d,
@@ -60,7 +60,7 @@ class Create_Utils:
         e_m = ft.Dropdown(label="Month: ", options=[ft.dropdown.Option(m) for m in months])
         e_d = ft.TextField(label="Day: ", width=70)
         e_h = ft.Dropdown(label="Hours: ", options=[ft.dropdown.Option(h) for h in hours], width=150)
-        e_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes])
+        e_min = ft.Dropdown(label="Minutes: ", options=[ft.dropdown.Option(m) for m in minutes], width=150)
 
         end = ft.Row([
             e_y,e_m,e_d,
@@ -311,11 +311,23 @@ class Create_Utils:
         page.add(column)
 # == Metodos que desencadena el evento de crear event, worker o resource ==============================
     @staticmethod
-    def _create_event(page: ft.Page, ctr, dom:Domain, name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, e_y, e_m, e_d, e_h, e_min, is_emergency, personal_requested, resources_requested):
+    def _create_event(page: ft.Page, ctr, dom:Domain, 
+                      name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, e_y, e_m, e_d, e_h, e_min, 
+                      is_emergency, personal_requested:dict, resources_requested:dict):
         if not Creation_Validate.validate_(page, specialist_in_charge, dom.get_specialities(), ctr):
             return
         begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, 0)
         end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, 0)
+        data_workers = dom.get_count("w")
+        for p, c in personal_requested.items():
+            if p not in data_workers.keys() or c > data_workers[p]:
+                Creation_Validate.validate_action(page, "Invalid personal", f"The personal '{p}' is not available in the required count")
+                return
+        data_resources = dom.get_count("r")
+        for r, c in resources_requested.items():
+            if r not in data_resources.keys() or c > data_resources[r]:
+                Creation_Validate.validate_action(page, "Invalid resource", f"The resource '{r}' is not available in the required count")
+                return
         id = dom.ids_generator("e")
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
         dom.rebuild_relations()

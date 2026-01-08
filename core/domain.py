@@ -270,3 +270,19 @@ class Domain:
                 if used >= needed:
                     return False
         return True 
+    # metodo para obtener un diccionario de recursos y especialidades con la cantidad disponible=============
+    def get_count(self, kind:str) -> dict[str, int]:
+        data:dict[str,int] = {}
+        if kind.lower() == "w":
+            for w in self.workers:
+                if w.specialty in data:
+                    data[w.specialty] += 1
+                else:
+                    data[w.specialty] = 1
+        elif kind.lower() == "r":
+            for r in self.resources:
+                if r.name in data:
+                    data[r.name] += 1
+                else:
+                    data[r.name] = 1
+        return data

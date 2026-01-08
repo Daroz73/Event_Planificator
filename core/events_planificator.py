@@ -106,7 +106,7 @@ class Events_Planificator:
                 event.resources.append(resource.id)
             resource.use_plan.append(event.id)
             return 
-        last_event_id = resource.use_plan[-1].end
+        last_event_id = resource.use_plan[-1]
         last_event = next((e for e in events if e.id == last_event_id), None)
         if last_event is None:
             return

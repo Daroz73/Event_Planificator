@@ -2,50 +2,50 @@
     {
         "id": "w1",
         "name": "Yoly Sanchez",
-        "co_requested": "especulo",
+        "co_requested": "estetoscopios",
         "use_plan": [],
-        "specialty": "ginecologo"
+        "specialty": "Ginecología"
     },
     {
         "id": "w2",
         "name": "Darian Perez",
         "co_requested": "electro",
         "use_plan": [],
-        "specialty": "cardiologo"
+        "specialty": "Cardiología"
     },
     {
         "id": "w3",
         "name": "Dayan Rodriguez",
         "co_requested": "laptop",
         "use_plan": [],
-        "specialty": "biomedico"
+        "specialty": "Psiquiatría"
     },
     {
         "id": "w7",
         "name": "Loraimis Villavicencio",
         "co_requested": "microscopio",
         "use_plan": [],
-        "specialty": "enfermero"
+        "specialty": "Enfermería"
     },
     {
         "id": "w5",
         "name": "Ana Carla",
         "co_requested": "geringa",
         "use_plan": [],
-        "specialty": "enfermero"
+        "specialty": "Enfermería"
     },
     {
         "id": "w4",
         "name": "Lauren",
         "co_requested": "lapicero",
         "use_plan": [],
-        "specialty": "biomedico"
+        "specialty": "Anestesiología"
     },
     {
         "id": "w6",
         "name": "Jose",
         "co_requested": "Camilla",
         "use_plan": [],
-        "specialty": "enfermero"
+        "specialty": "Enfermería"
     }
 ]
