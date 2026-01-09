@@ -34,5 +34,17 @@
         "name": "estetoscopios",
         "co_requested": "Ginecología",
         "use_plan": []
+    },
+    {
+        "id": "r7",
+        "name": "máquinas de diálisis",
+        "co_requested": "Urología",
+        "use_plan": []
+    },
+    {
+        "id": "r8",
+        "name": "máquinas de rayos X",
+        "co_requested": "Cirugía general",
+        "use_plan": []
     }
 ]

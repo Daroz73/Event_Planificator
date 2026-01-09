@@ -4,11 +4,11 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
 
 from creation_validate import Creation_Validate
+from visual_utils import Visual_Utils
 from core.domain import Domain
 from core.events import Event
 from core.worker import Worker
 from core.resource import Resource
-from core.events_planificator import Events_Planificator
 from datetime import timedelta
 
 class Create_Utils:
@@ -171,11 +171,21 @@ class Create_Utils:
 
         is_emergency = ft.Checkbox(label="Is Emergency?")
         create_event_btn = ft.ElevatedButton("Create Event",
-                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, ctr, dom, event_name.value, specialist_in_charge.value, b_y.value, b_m.value, b_d.value, b_h.value, b_min.value, e_y.value, e_m.value, e_d.value, e_h.value, e_min.value, is_emergency.value,Create_Utils._get_values_from_column(personal_col),Create_Utils._get_values_from_column(resource_col))
+                              on_click=lambda e, ctr=specialist_in_charge: Create_Utils._create_event(page, 
+                                                                        ctr, dom,event_name.value, 
+                                                                        specialist_in_charge.value, b_y.value, 
+                                                                        b_m.value, b_d.value, b_h.value, b_min.value, 
+                                                                        e_y.value, e_m.value, e_d.value, e_h.value, 
+                                                                        e_min.value, is_emergency.value,
+                                                                        Create_Utils._get_values_from_column(personal_col),
+                                                                        Create_Utils._get_values_from_column(resource_col),
+                                                                        save_event_btn
+                                                                    )
             )
         save_event_btn = ft.ElevatedButton(
             "Save",
-            on_click=lambda e: (dom.save_pending(), 
+            visible=False,
+            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_events, save_event_btn), 
                                 Creation_Validate.validate_action(page,"Saved","Events saved successfully")
                                 )
         )
@@ -240,11 +250,17 @@ class Create_Utils:
             # on_blur=lambda e: Creation_Validate.hide_specialities_menu(page, worker_menu_itelligent)
         )
         add_worker_btn = ft.ElevatedButton("Add Worker",
-                              on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value, worker_co_requested.value, worker_role.value, worker_co_requested, worker_role)
+                              on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value,
+                                                                            worker_co_requested.value, 
+                                                                            worker_role.value, worker_co_requested,
+                                                                            worker_role,
+                                                                            save_workers_bts
+                                                                            )
                             )
         save_workers_bts = ft.ElevatedButton(
             "Save",
-            on_click=lambda e: (dom.save_pending(), 
+            visible=False,
+            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_workers, save_workers_bts), 
                     Creation_Validate.validate_action(page,"Saved","Workers saved successfully")
                     )
         )
@@ -292,13 +308,18 @@ class Create_Utils:
             on_focus=lambda e: Creation_Validate.show_menu(e, page, co_requested_option, co_requested_menu)    
         )
         add_resource_btn = ft.ElevatedButton("Add Resource",
-                              on_click = lambda e: Create_Utils._create_resource(page, dom, resource_name.value, resource_co_requested.value, resource_name, resource_co_requested)
+                              on_click = lambda e: Create_Utils._create_resource(page, dom, resource_name.value, 
+                                                                                resource_co_requested.value, 
+                                                                                resource_name, resource_co_requested,
+                                                                                save_resources_btn
+                                                                                )
                             )
         save_resources_btn = ft.ElevatedButton(
             "Save",
-            on_click=lambda e: (dom.save_pending(), 
+            visible=False,
+            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_resources, save_resources_btn), 
                                 Creation_Validate.validate_action(page,"Saved","Resource saved successfully")
-                                )
+                            )
         )
         column = ft.Column([
             resource_name,
@@ -313,7 +334,7 @@ class Create_Utils:
     @staticmethod
     def _create_event(page: ft.Page, ctr, dom:Domain, 
                       name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, e_y, e_m, e_d, e_h, e_min, 
-                      is_emergency, personal_requested:dict, resources_requested:dict):
+                      is_emergency, personal_requested:dict, resources_requested:dict, btn_save:ft.ElevatedButton):
         if not Creation_Validate.validate_(page, specialist_in_charge, dom.get_specialities(), ctr):
             return
         begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, 0)
@@ -332,9 +353,11 @@ class Create_Utils:
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
         dom.rebuild_relations()
         dom.add(event)
+        Visual_Utils.visible_btn(page, dom.pending_events, btn_save)
     # =====================================================================================
     @staticmethod
-    def _create_worker(page:ft.Page, dom: Domain, name:str, co_requested:str, speciality: str, co_requested_ctr:ft.TextField, speciality_ctr:ft.TextField):
+    def _create_worker(page:ft.Page, dom: Domain, name:str, co_requested:str, speciality: str, 
+                       co_requested_ctr:ft.TextField, speciality_ctr:ft.TextField, save_btn:ft.ElevatedButton):
         if not Creation_Validate.validate_(page, co_requested, dom.get_resources(), co_requested_ctr):
             return
         if not Creation_Validate.validate_(page, speciality, dom.get_specialities(), speciality_ctr):
@@ -342,10 +365,12 @@ class Create_Utils:
         id = dom.ids_generator("w")
         worker = Worker(id, name, co_requested,[], speciality)
         dom.add(worker)
+        Visual_Utils.visible_btn(page, dom.pending_workers, save_btn)
         Creation_Validate.validate_action(page, "Added Worker", "The worker had added succefully")
     # =======================================================================================================
     @staticmethod
-    def _create_resource(page:ft.Page, dom:Domain, name:str, co_requested:str, ctr_name:ft.TextField, crt_co_requested:ft.TextField):
+    def _create_resource(page:ft.Page, dom:Domain, name:str, co_requested:str, ctr_name:ft.TextField,
+                        crt_co_requested:ft.TextField, save_btn:ft.ElevatedButton):
         if not Creation_Validate.validate_(page, name, dom.get_resources(), ctr_name):
             return
         if not Creation_Validate.validate_(page, co_requested, dom.get_specialities(), crt_co_requested):
@@ -353,8 +378,9 @@ class Create_Utils:
         id = dom.ids_generator("r")
         resource = Resource(id, name, co_requested, [])
         dom.add(resource)
+        Visual_Utils.visible_btn(page, dom.pending_resources, save_btn)
         Creation_Validate.validate_action(page, "Added Resource", "The resources had added succefully")
-    # ==============================================
+    # =======================================================================================================
     @staticmethod
     def _agg_row(page: ft.Page, column: ft.Column, label_value: str, speciality_option:set[str]):
         menu = ft.ListView(
@@ -396,12 +422,12 @@ class Create_Utils:
         ]
         column.controls.insert(1,new_row)
         page.update()
-    # =============================================
+    # ===============================================================================================
     @staticmethod
     def _remove_row(page: ft.Page, column: ft.Column, row: ft.Row):
         column.controls.remove(row)
         page.update()
-    # =============================================
+    # ===============================================================================================
     @staticmethod
     def _get_values_from_column(column: ft.Column) -> dict:
         extracted_dict = {}
@@ -442,13 +468,13 @@ class Create_Utils:
         begin, end = dom.find_next_avialable_slot(personal_requested, resource_requested, duration)
 
         b_y.value = str(begin.year)
-        b_m.value = begin.strftime("%B").capitalize()
+        b_m.value = Creation_Validate._num_to_month(begin.month)
         b_d.value = str(begin.day)
         b_h.value = f"{begin.hour:02d}"
         b_min.value = f"{begin.minute:02d}"
 
         e_y.value = str(end.year)
-        e_m.value = end.strftime("%B").capitalize()
+        e_m.value = Creation_Validate._num_to_month(end.month)
         e_d.value = str(end.day)
         e_h.value = f"{end.hour:02d}"
         e_min.value = f"{end.minute:02d}"

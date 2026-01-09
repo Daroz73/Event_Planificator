@@ -155,7 +155,6 @@ class Visual_Utils:
         navegation_bar = page.controls[0]
         page.clean()
         page.add(navegation_bar)
-        print(item.use_plan)
         column_use_plan = ft.Column()
         for e in item.use_plan:
             event_id = ft.Text(f"ID: {e.id}")
@@ -256,4 +255,18 @@ class Visual_Utils:
         dlg = Creation_Validate._create_dialog(page, "Save", "Deletions saved successfully")
         dlg.open = True
         page.add(dlg)
+        page.update()
+    # ====================================================================================================
+    @staticmethod
+    def on_click_save(page:ft.Page, dom:Domain, item_list:list, btn:ft.ElevatedButton):
+        dom.save_pending()
+        Visual_Utils.visible_btn(page, item_list, btn)
+        page.update()
+    # funcion para controlar la visibilidad de los botones================================================
+    @staticmethod
+    def visible_btn(page: ft.Page, item_list:list, btn:ft.ElevatedButton):
+        if len(item_list) > 0:
+            btn.visible = True
+        else:
+            btn.visible = False
         page.update()

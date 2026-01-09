@@ -104,3 +104,10 @@ class Creation_Validate:
         for i in range(len(months)):
             if months[i].lower() == month.lower():
                 return i + 1
+    # funcion para convertir un numero en un mes
+    @staticmethod
+    def _num_to_month(num:int) -> str:
+        months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", 
+                  "Octubre", "Noviembre", "Diciembre"]
+        if 1 <= num <= 12:
+            return months[num - 1]
