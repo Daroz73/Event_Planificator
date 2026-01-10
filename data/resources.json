@@ -18,12 +18,6 @@
         "use_plan": []
     },
     {
-        "id": "r5",
-        "name": "microscopios",
-        "co_requested": "Enfermería",
-        "use_plan": []
-    },
-    {
         "id": "r1",
         "name": "equipos de transporte de pacientes",
         "co_requested": "Enfermería",

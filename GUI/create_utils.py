@@ -362,6 +362,10 @@ class Create_Utils:
             return
         if not Creation_Validate.validate_(page, speciality, dom.get_specialities(), speciality_ctr):
             return
+        if speciality not in dom.get_specialities_by_resource()[co_requested]:
+            Creation_Validate.validate_action(page, "Invalid speciality", 
+                                              f"The speciality '{speciality}' cannot use the resource '{co_requested}'")
+            return
         id = dom.ids_generator("w")
         worker = Worker(id, name, co_requested,[], speciality)
         dom.add(worker)
@@ -374,6 +378,10 @@ class Create_Utils:
         if not Creation_Validate.validate_(page, name, dom.get_resources(), ctr_name):
             return
         if not Creation_Validate.validate_(page, co_requested, dom.get_specialities(), crt_co_requested):
+            return
+        if name not in dom.get_specialities_by_resource()[name]:
+            Creation_Validate.validate_action(page, "Invalid speciality", 
+                                              f"The speciality '{co_requested}' cannot use the resource '{name}'")
             return
         id = dom.ids_generator("r")
         resource = Resource(id, name, co_requested, [])

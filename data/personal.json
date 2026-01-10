@@ -35,13 +35,6 @@
         "specialty": "Enfermería"
     },
     {
-        "id": "w4",
-        "name": "Lauren",
-        "co_requested": "lapicero",
-        "use_plan": [],
-        "specialty": "Anestesiología"
-    },
-    {
         "id": "w6",
         "name": "Jose",
         "co_requested": "Camilla",

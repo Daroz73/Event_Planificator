@@ -34,8 +34,12 @@ class Visual_Utils:
 
         save_btn = ft.ElevatedButton(
             text = "Save",
+            visible=False,
             icon=ft.Icon(ft.Icons.SAVE),
-            on_click=lambda e: Visual_Utils.save_deletions(page,dom)
+            on_click=lambda e: (
+                Visual_Utils.save_deletions(page,dom),
+                Visual_Utils.visible_btn(page, dom.event_to_delete, save_btn)
+            )
         )
 
         for e in events:
@@ -49,8 +53,11 @@ class Visual_Utils:
                 )
             delete_option = ft.MenuItemButton(
                 content=ft.Text("Delete Event"),
-                on_click=lambda e, e_id=e.id: Delete_Utils.remove_item_grafic(page, dom, "e", e_id, event_row)
+                on_click=lambda e, e_id=e.id: (
+                    Delete_Utils.remove_item_grafic(page, dom, "e", e_id, event_row),
+                    Visual_Utils.visible_btn(page, dom.event_to_delete, save_btn)
                 )
+            )
             event_row = Row([
                 event_id,
                 event_name,
@@ -86,8 +93,12 @@ class Visual_Utils:
 
         save_btn = ft.ElevatedButton(
             text = "Save",
+            visible=False,
             icon=ft.Icon(ft.Icons.SAVE),
-            on_click=lambda e: Visual_Utils.save_deletions(page, dom)
+            on_click=lambda e: (
+                Visual_Utils.save_deletions(page, dom),
+                Visual_Utils.visible_btn(page, dom.worker_to_delete if kind.lower() == "worker" else dom.resource_to_delete, save_btn)
+            )
         )
 
         for l in items:
@@ -103,7 +114,10 @@ class Visual_Utils:
                 )
                 worker_delete_option = ft.MenuItemButton(
                     content=ft.Text("Delete Worker"),
-                    on_click=lambda e, wid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, dom, "w", wid, row_copy)
+                    on_click=lambda e, wid=l.id, row_copy=row: (
+                        Delete_Utils.remove_item_grafic(page, dom, "w", wid, row_copy),
+                        Visual_Utils.visible_btn(page, dom.worker_to_delete, save_btn)
+                    )
                 )
                 row.controls = [
                     worker_id,
@@ -129,7 +143,10 @@ class Visual_Utils:
                 )
                 resource_delete_option = ft.MenuItemButton(
                     content=ft.Text("Delete Resource"),
-                    on_click=lambda e, rid=l.id, row_copy=row: Delete_Utils.remove_item_grafic(page, dom, "r", rid, row_copy)
+                    on_click=lambda e, rid=l.id, row_copy=row: (
+                        Delete_Utils.remove_item_grafic(page, dom, "r", rid, row_copy),
+                        Visual_Utils.visible_btn(page, dom.resource_to_delete, save_btn)
+                    )
                 )
                 row.controls = [
                     resource_id,

@@ -219,6 +219,130 @@ class Domain:
         "camas hospitalarias","ambulancias","equipos de transporte de pacientes","centrifugas para análisis de muestras",
         "analizadores bioquímicos","Microscopios","Espectrómetros","Quirófano"
         }
+    # ============================================================================================================
+    # funcion para optener las especialesdades que pueden utilizar un x recurso
+    def get_specialities_by_resource(self) -> dict[str,set[str]]:
+        return {
+            "jeringas": {"all"},
+            "recetas": {"all"},
+            "guantes desechables": {"all"},
+            "mascarillas": {"all"},
+            "batas desechables": {"all"},
+            "gasas estériles": {"all"},
+            "vendas": {"all"},
+            "agujas desechables": {"all"},
+            "antisépticos": {"all"},
+            "soluciones desinfectantes": {"all"},
+            "esparadrapos": {"all"},
+            "apósitos": {"all"},
+            "termómetros": {"all"},
+            "termómetros digitales": {"all"},
+            "lapiceros": {"all"},
+            "estetoscopios": {
+                "Medicina interna", "Cardiología", "Neumología",
+                "Medicina familiar", "Pediatría", "Geriatría",
+                "Medicina de emergencia", "Enfermería"
+            },
+            "tensiómetros": {"all"},
+            "pulsioxímetros": {
+                "Medicina interna", "Neumología", "Cardiología",
+                "Medicina de emergencia", "Anestesiología", "Enfermería"
+            },
+            "glucómetros": {
+                "Endocrinología", "Medicina interna",
+                "Medicina familiar", "Enfermería"
+            },
+            "espéculo": {"Ginecología", "Obstetricia"},
+            "incubadoras neonatales": {"Neonatología"},
+            "bilirrubinómetros": {"Neonatología", "Pediatría"},
+            "pinzas hemostáticas": {
+                "Cirugía general", "Cirugía cardíaca", "Cirugía torácica",
+                "Cirugía vascular", "Cirugía pediátrica",
+                "Cirugía ortopédica y traumatología",
+                "Neurocirugía"
+            },
+            "tijeras quirúrgicas": {
+                "Cirugía general", "Cirugía plástica",
+                "Cirugía pediátrica", "Neurocirugía"
+            },
+            "portaagujas": {
+                "Cirugía general", "Cirugía plástica",
+                "Cirugía pediátrica", "Neurocirugía"
+            },
+            "bisturí": {
+                "Cirugía general", "Cirugía plástica",
+                "Cirugía pediátrica", "Neurocirugía"
+            },
+            "hojas de bisturí": {
+                "Cirugía general", "Cirugía plástica",
+                "Cirugía pediátrica", "Neurocirugía"
+            },
+            "mesas quirúrgicas": {
+                "Cirugía general", "Cirugía cardíaca",
+                "Cirugía torácica", "Neurocirugía"
+            },
+            "lámparas quirúrgicas": {
+                "Cirugía general", "Cirugía cardíaca",
+                "Cirugía torácica", "Neurocirugía"
+            },
+            "Quirófano": {
+                "Cirugía general", "Cirugía cardíaca", "Cirugía torácica",
+                "Cirugía vascular", "Neurocirugía",
+                "Cirugía pediátrica", "Cirugía plástica"
+            },
+            "ambú": {
+                "Anestesiología", "Medicina de emergencia", "Enfermería"
+            },
+            "ventiladores mecánicos": {
+                "Anestesiología", "Neumología",
+                "Medicina de emergencia", "Medicina interna"
+            },
+            "máquinas de anestesia": {"Anestesiología"},
+            "bombas de infusión": {
+                "Anestesiología", "Medicina interna",
+                "Neonatología", "Enfermería"
+            },
+            "concentradores de oxígeno": {
+                "Neumología", "Medicina interna",
+                "Medicina de emergencia", "Enfermería"
+            },
+            "máquinas de succión": {
+                "Anestesiología", "Medicina de emergencia", "Enfermería"
+            },
+            "desfibriladores": {
+                "Cardiología", "Medicina de emergencia"
+            },
+            "máquinas de electrocardiograma (ECG)": {
+                "Cardiología", "Medicina interna"
+            },
+            "monitores multiparamétricos": {
+                "Cardiología", "Anestesiología",
+                "Medicina de emergencia"
+            },
+            "máquinas de rayos X": {"Radiología"},
+            "escáneres de resonancia magnética": {"Radiología"},
+            "tomógrafos computarizados (TAC)": {"Radiología"},
+            "ecógrafos": {"Radiología", "Ginecología", "Obstetricia"},
+            "centrifugas para análisis de muestras": {
+                "Análisis clínicos", "Bioquímica clínica"
+            },
+            "analizadores bioquímicos": {"Bioquímica clínica"},
+            "Microscopios": {
+                "Microbiología y parasitología",
+                "Anatomía patológica", "Análisis clínicos"
+            },
+            "Espectrómetros": {"Bioquímica clínica"},
+            "sillas de ruedas": {"all"},
+            "camas hospitalarias": {"all"},
+            "equipos de transporte de pacientes": {
+                "Medicina de emergencia", "Enfermería"
+            },
+            "ambulancias": {
+                "Emergenciología", "Chofer"
+            },
+            "bolsas de esterilización": {"Enfermería"},
+            "esterilizadores": {"Enfermería"}
+        }
     # ====================================================================================================
     # Funcion para buscar huecos
     def find_next_avialable_slot(self, personal_req:dict, resource_req:dict, duration:timedelta,step_minutes: int = 15) ->tuple[datetime, datetime]:
