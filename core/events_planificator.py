@@ -16,13 +16,15 @@ class Events_Planificator:
             and Events_Planificator._check_co_requested(workers, resources, event)
         ): 
             for e in events:
+                if event.begin == None or e.end == None:
+                    continue
                 if ((Events_Planificator.conflict_event_begin(e, event) 
                     or abs((event.begin - e.begin).seconds) < 3600) 
                     and Events_Planificator.compare_event_resources(e, event)
                 ):
                    return False
-            
-            events.append(event)
+            if not event in events:
+                events.append(event)    
             Data_saved_loader.append_(event, "events")
             return True
         return False

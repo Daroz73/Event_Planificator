@@ -172,7 +172,7 @@ class Visual_Utils:
         navegation_bar = page.controls[0]
         page.clean()
         page.add(navegation_bar)
-        column_use_plan = ft.Column()
+        column_use_plan = ft.Column(scroll=ft.ScrollMode.AUTO)
         for e in item.use_plan:
             event_id = ft.Text(f"ID: {e.id}")
             event_name = ft.Text(f"Name: {e.name}")
@@ -211,8 +211,8 @@ class Visual_Utils:
         event_begin = ft.Text(f"Begin: {event.begin}")
         event_end = ft.Text(f"End: {event.end}")
         event_emergency = ft.Text(f"Emergency: {event.is_emergency}")
-        event_workers_column = ft.Column([])
-        event_resources_column = ft.Column([])
+        event_workers_column = ft.Column([], scroll=ft.ScrollMode.AUTO)
+        event_resources_column = ft.Column([], scroll=ft.ScrollMode.AUTO)
         for w in event.workers:
             w_item = Visual_Utils._get_visual_resource(w)
             event_workers_column.controls.append(w_item)

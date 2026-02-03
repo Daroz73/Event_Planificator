@@ -5,10 +5,74 @@
         "personal_requested": {},
         "resources_requested": {},
         "specialist_in_charge": "cirujano",
-        "begin": "2025-11-08 09:45:46.691175",
-        "end": "2025-11-08 09:45:46.691175",
+        "begin": "2025-11-08T09:45:46.691175",
+        "end": "2025-11-08T09:45:46.691175",
         "is_emergency": "False",
         "workers": [],
         "resources": []
+    },
+    {
+        "id": "e1",
+        "name": "Parto",
+        "personal_requested": {
+            "Ginecología": 1
+        },
+        "resources_requested": {
+            "estetoscopios": 1
+        },
+        "specialist_in_charge": "Ginecología",
+        "begin": "2026-02-04T23:58:00",
+        "end": "2026-02-05T01:08:00",
+        "is_emergency": "False",
+        "workers": [],
+        "resources": []
+    },
+    {
+        "id": "e2",
+        "name": "Prueba Zorra",
+        "personal_requested": {
+            "Cardiología": 1,
+            "Psiquiatría": 1
+        },
+        "resources_requested": {
+            "máquinas de electrocardiograma (ECG)": 1,
+            "laptop": 1
+        },
+        "specialist_in_charge": "Cardiología",
+        "begin": "2026-02-04T00:09:00",
+        "end": "2026-02-05T04:09:00",
+        "is_emergency": "False",
+        "workers": [
+            "w3",
+            "w9"
+        ],
+        "resources": [
+            "r2",
+            "r3"
+        ]
+    },
+    {
+        "id": "e2",
+        "name": "Prueba Zorra",
+        "personal_requested": {
+            "Cardiología": 1,
+            "Psiquiatría": 1
+        },
+        "resources_requested": {
+            "máquinas de electrocardiograma (ECG)": 1,
+            "laptop": 1
+        },
+        "specialist_in_charge": "Cardiología",
+        "begin": "2026-02-04T00:09:00",
+        "end": "2026-02-05T04:09:00",
+        "is_emergency": "False",
+        "workers": [
+            "w3",
+            "w9"
+        ],
+        "resources": [
+            "r2",
+            "r3"
+        ]
     }
 ]

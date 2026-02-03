@@ -18,12 +18,20 @@ class Creation_Validate:
             hour = int(hour)
             minute = int(minute)
             seconds = int(seconds)
-            if datetime(year, month, day, hour, minute, seconds) > datetime.now():
-                return datetime(year, month, day, hour, minute, seconds)
+
+            created_date = datetime(year, month, day, hour, minute, seconds)
+            if created_date >= datetime.now():
+                return created_date
+            else:
+                dialog = Creation_Validate._create_dialog(page, "Invalid Date", "The date must be in the future")
+                dialog.open = True
+                page.add(dialog)
+                return None
         except Exception:
             dialog = Creation_Validate._create_dialog(page, "Invalid Date", "The arg are not valid")
             dialog.open = True
             page.add(dialog)
+            return None
     # =====================================================================================
     @staticmethod
     def _create_dialog(page: ft.Page, title: str, content: str) -> ft.AlertDialog:

@@ -1,9 +1,9 @@
 import flet as ft
 import sys, os
-# Importar core
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
-# Importar utilidades externas
+
 from visual_utils import Visual_Utils
 from create_utils import Create_Utils
 from core.domain import Domain
@@ -11,6 +11,7 @@ from core.domain import Domain
 
 def main(page: ft.Page):
     page.title = "Event Planificator"
+    page.scroll = ft.ScrollMode.AUTO
     domain = Domain()
 
     navegation_bar = ft.AppBar(

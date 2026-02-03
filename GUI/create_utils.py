@@ -339,6 +339,11 @@ class Create_Utils:
             return
         begin_date = Creation_Validate.validate_date(page, b_y, b_m, b_d, b_h, b_min, 0)
         end_date = Creation_Validate.validate_date(page, e_y, e_m, e_d, e_h, e_min, 0)
+        if begin_date is None or end_date is None:
+            return
+        if begin_date >= end_date:
+            Creation_Validate.validate_action(page, "Invalid Date Range", "The begin date must be before the end date")
+            return
         data_workers = dom.get_count("w")
         for p, c in personal_requested.items():
             if p not in data_workers.keys() or c > data_workers[p]:
@@ -351,10 +356,12 @@ class Create_Utils:
                 return
         id = dom.ids_generator("e")
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
-        dom.rebuild_relations()
-        dom.add(event)
+        # dom.rebuild_relations()
+        dom.pending_events.append(event)
+        Creation_Validate.validate_action(page, "Success", f"The event {name} has been added to the wait list.\n For saved it click the Save Button.")
         Visual_Utils.visible_btn(page, dom.pending_events, btn_save)
-    # =====================================================================================
+        page.update()
+    # =======================================================================================================
     @staticmethod
     def _create_worker(page:ft.Page, dom: Domain, name:str, co_requested:str, speciality: str, 
                        co_requested_ctr:ft.TextField, speciality_ctr:ft.TextField, save_btn:ft.ElevatedButton):

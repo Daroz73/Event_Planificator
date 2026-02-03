@@ -3,13 +3,17 @@
         "id": "r2",
         "name": "laptop",
         "co_requested": "Psiquiatría",
-        "use_plan": []
+        "use_plan": [
+            "e2"
+        ]
     },
     {
         "id": "r3",
         "name": "máquinas de electrocardiograma (ECG)",
         "co_requested": "Cardiología",
-        "use_plan": []
+        "use_plan": [
+            "e2"
+        ]
     },
     {
         "id": "r4",
@@ -27,7 +31,9 @@
         "id": "r6",
         "name": "estetoscopios",
         "co_requested": "Ginecología",
-        "use_plan": []
+        "use_plan": [
+            "e1"
+        ]
     },
     {
         "id": "r7",
@@ -39,6 +45,96 @@
         "id": "r8",
         "name": "máquinas de rayos X",
         "co_requested": "Cirugía general",
+        "use_plan": []
+    },
+    {
+        "id": "r9",
+        "name": "espéculo",
+        "co_requested": "Ginecología",
+        "use_plan": []
+    },
+    {
+        "id": "r10",
+        "name": "ambú",
+        "co_requested": "Anestesiología",
+        "use_plan": []
+    },
+    {
+        "id": "r11",
+        "name": "ventiladores mecánicos",
+        "co_requested": "Medicina de emergencia",
+        "use_plan": []
+    },
+    {
+        "id": "r12",
+        "name": "bombas de infusión",
+        "co_requested": "Enfermería",
+        "use_plan": []
+    },
+    {
+        "id": "r13",
+        "name": "concentradores de oxígeno",
+        "co_requested": "Neumología",
+        "use_plan": []
+    },
+    {
+        "id": "r14",
+        "name": "desfibriladores",
+        "co_requested": "Cardiología",
+        "use_plan": []
+    },
+    {
+        "id": "r15",
+        "name": "monitores multiparamétricos",
+        "co_requested": "Medicina de emergencia",
+        "use_plan": []
+    },
+    {
+        "id": "r16",
+        "name": "incubadoras neonatales",
+        "co_requested": "Neonatología",
+        "use_plan": []
+    },
+    {
+        "id": "r17",
+        "name": "bilirrubinómetros",
+        "co_requested": "Pediatría",
+        "use_plan": []
+    },
+    {
+        "id": "r18",
+        "name": "Microscopios",
+        "co_requested": "Análisis clínicos",
+        "use_plan": []
+    },
+    {
+        "id": "r19",
+        "name": "analizadores bioquímicos",
+        "co_requested": "Bioquímica clínica",
+        "use_plan": []
+    },
+    {
+        "id": "r20",
+        "name": "ambulancias",
+        "co_requested": "Emergenciología",
+        "use_plan": []
+    },
+    {
+        "id": "r21",
+        "name": "sillas de ruedas",
+        "co_requested": "Medicina interna",
+        "use_plan": []
+    },
+    {
+        "id": "r22",
+        "name": "camas hospitalarias",
+        "co_requested": "Geriatría",
+        "use_plan": []
+    },
+    {
+        "id": "r23",
+        "name": "equipos de transporte de pacientes",
+        "co_requested": "Enfermería",
         "use_plan": []
     }
 ]

@@ -104,8 +104,8 @@ class Data_saved_loader:
                 "personal_requested" : event.personal_requested,
                 "resources_requested": event.resources_requested,
                 "specialist_in_charge": f"{event.specialist_in_charge}",
-                "begin":f"{event.begin}",
-                "end":f"{event.end}",
+                "begin":f"{event.begin.isoformat() if event.begin else None}",
+                "end":f"{event.end.isoformat() if event.end else None}",
                 "is_emergency":f"{event.is_emergency}",
                 "workers":[w for w in event.workers],
                 "resources":[r for r in event.resources]
@@ -148,11 +148,14 @@ class Data_saved_loader:
     # metodo auxiliar para garantizar que las fechas de los json se carguen como datetime
     @staticmethod
     def _safe_parse_date(value, default_date=datetime.now()) -> datetime:
-        if not value:
-            return default_date
+        if value in (None, "None", ""):
+            return None
         if isinstance(value, datetime):
             return value
-        return datetime.fromisoformat(value)
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError:
+            return None
 
     # metodo para convertir de formato json a Worker o Resource
     @staticmethod
