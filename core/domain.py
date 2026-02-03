@@ -55,20 +55,17 @@ class Domain:
     def add(self, item: Event | Worker | Resource):
         if isinstance(item, Event):
             self.pending_events.append(item)
-            # self._add_event(item)
         elif isinstance(item, Worker):
             self.pending_workers.append(item)
-            # Data_saved_loader.append_(item, "personal")
-            # self.workers = Data_saved_loader.load_file_info("personal")
         else:
             self.pending_resources.append(item)
-            # Data_saved_loader.append_(item, "resources")
-            # self.resources = Data_saved_loader.load_file_info("resources")
+
     # metodo que agenda un evento
     def _add_event(self, event:Event):
         Events_Planificator.add_resource(self.workers, self.resources, self.events, event)
         Events_Planificator.Agg_Event(self.workers, self.resources, self.events, event)
-        self.events = Data_saved_loader.load_file_info("events")
+        self.events = self.list_("events")
+    
     # metodo para listar los eventos
     def list_(self, string:str) -> list[Event]:
         if string.lower() == "events":
@@ -78,21 +75,20 @@ class Domain:
         if string.lower() == "resource":
             return Data_saved_loader.load_file_info("resources")
         return []
+    
     # metodo para eliminar un evento
     def remove_item(self, kind:str, item_id: str):
         if kind == "e" or kind == "event":
             Data_saved_loader.remove_(self.events, item_id, "events")
-            # self.events = Data_saved_loader.load_file_info("events")
         if kind == "w" or kind == "worker":
             Data_saved_loader.remove_(self.workers, item_id, "personal")
-            # self.workers = Data_saved_loader.load_file_info("personal")
         if kind == "r" or kind == "resource":
             Data_saved_loader.remove_(self.resources, item_id, "resources")
-            # self.resources = Data_saved_loader.load_file_info("resources")
         # limpiar los set de objetos a eliminar
         self.event_to_delete.clear()
         self.worker_to_delete.clear()
         self.resource_to_delete.clear()
+    
     # metodo para mostrar detalles de un event | resource | worker
     def show_details(self, id: str, *args):
         if id : 
@@ -128,6 +124,7 @@ class Domain:
             else:
                 counter += 1
         return new_id
+    
     # metodo para obtener un item especifico por su id
     def get_item(self, type:str, id:str) -> Event | Worker | Resource | None:
         if type.lower() == "e" or type.lower() == "event":
@@ -143,9 +140,11 @@ class Domain:
                 if item.id.lower() == id.lower():
                     return item
         return None
+    
     # metodo para ordenar una lista de eventos por fecha de inicio==========================================
     def sorted_events_by_begin(slef, events_list:list[Event]) -> list[Event]:
         return sorted(events_list, key=lambda x: x.begin)
+    
     # metodo para marcar los objetos que se quieren borrar 
     def mark_for_delete(self, kind:str, item_id:str):
         if kind == "e" or kind == "event":
@@ -157,6 +156,7 @@ class Domain:
         elif kind == "r" or kind == "resource":
             self.resource_to_delete.add(item_id)
             self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]
+    
     # metodo para guardar los eventos creados en las listas temporales antes de ser guardados en los json=====
     def save_pending(self):
         # Guardar Eventos
@@ -167,7 +167,6 @@ class Domain:
             Events_Planificator.Agg_Event(
                 self.workers, self.resources, self.events, event
             )
-            Data_saved_loader.append_(event, "events")
             self.events.append(event)
         self.persist_workers_and_resources()
         # Guardar worker
@@ -204,6 +203,7 @@ class Domain:
                 , "Microbiología y parasitología", "Neurofisiología clínica", "Farmacología clínica"
                 , "Rehabilitación", "Fisioterapia", "Odontología", "Emergenciología","Enfermería","Chofer"
                 }
+    
     def get_resources(self):
         return {
         "jeringas","recetas","espéculo","guantes desechables","mascarillas","batas desechables","gasas estériles",
@@ -219,7 +219,9 @@ class Domain:
         "camas hospitalarias","ambulancias","equipos de transporte de pacientes","centrifugas para análisis de muestras",
         "analizadores bioquímicos","Microscopios","Espectrómetros","Quirófano"
         }
+    
     # ============================================================================================================
+    
     # funcion para optener las especialesdades que pueden utilizar un x recurso
     def get_specialities_by_resource(self) -> dict[str,set[str]]:
         return {
@@ -344,6 +346,7 @@ class Domain:
             "esterilizadores": {"Enfermería"}
         }
     # ====================================================================================================
+    
     # Funcion para buscar huecos
     def find_next_avialable_slot(self, personal_req:dict, resource_req:dict, duration:timedelta,step_minutes: int = 15) ->tuple[datetime, datetime]:
         
@@ -373,10 +376,12 @@ class Domain:
                 return current_start, candidate_end
             current_start += timedelta(minutes=step_minutes)
     # ===================================================================================================
+    
     # funcion para detectar el solapamiento de errores
     def _overlaps(start1, end1, start2, end2):
         # True si los intervalos se solapan en el tiempo
         return start1 < end2 and start2 < end1
+    
     # funcion para validar si un hueco es valido
     def _is_valid_slot(self, start:datetime, end:datetime, personal_req:dict[str, int], resources_req:dict[str,int]):
         for e in self.events:
@@ -394,6 +399,7 @@ class Domain:
                 if used >= needed:
                     return False
         return True 
+    
     # metodo para obtener un diccionario de recursos y especialidades con la cantidad disponible=============
     def get_count(self, kind:str) -> dict[str, int]:
         data:dict[str,int] = {}

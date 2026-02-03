@@ -3,9 +3,7 @@
         "id": "w1",
         "name": "Yoly Sanchez",
         "co_requested": "estetoscopios",
-        "use_plan": [
-            "e1"
-        ],
+        "use_plan": [],
         "specialty": "Ginecología"
     },
     {
@@ -19,9 +17,7 @@
         "id": "w3",
         "name": "Dayan Rodriguez",
         "co_requested": "laptop",
-        "use_plan": [
-            "e2"
-        ],
+        "use_plan": [],
         "specialty": "Psiquiatría"
     },
     {
@@ -56,9 +52,7 @@
         "id": "w9",
         "name": "Carlos Medina",
         "co_requested": "máquinas de electrocardiograma (ECG)",
-        "use_plan": [
-            "e2"
-        ],
+        "use_plan": [],
         "specialty": "Cardiología"
     },
     {

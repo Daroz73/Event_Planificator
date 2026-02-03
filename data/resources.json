@@ -3,17 +3,13 @@
         "id": "r2",
         "name": "laptop",
         "co_requested": "Psiquiatría",
-        "use_plan": [
-            "e2"
-        ]
+        "use_plan": []
     },
     {
         "id": "r3",
         "name": "máquinas de electrocardiograma (ECG)",
         "co_requested": "Cardiología",
-        "use_plan": [
-            "e2"
-        ]
+        "use_plan": []
     },
     {
         "id": "r4",
@@ -31,9 +27,7 @@
         "id": "r6",
         "name": "estetoscopios",
         "co_requested": "Ginecología",
-        "use_plan": [
-            "e1"
-        ]
+        "use_plan": []
     },
     {
         "id": "r7",

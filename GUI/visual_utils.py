@@ -163,6 +163,7 @@ class Visual_Utils:
         page.add(save_btn)
         
 # ===========================================================================================================
+    
     # funcion estatica para mostrar el plan de uso de un recurso que es una de las opciones que te da el menu desplegable de los 3 puntos
     @staticmethod
     def show_use_plan(page:ft.Page, id:str, kind:str):
@@ -179,7 +180,8 @@ class Visual_Utils:
             event_begin = ft.Text(f"Begin: {e.begin}")
             event_end = ft.Text(f"End: {e.end}")
             view_details_option = ft.MenuItemButton(
-                content=ft.Text("View Details")
+                content=ft.Text("View Details"),
+                on_click=lambda e, e_id=e.id: Visual_Utils.show_event_details(page,e_id)
             )
             row = ft.Row([
                 event_id,
@@ -195,6 +197,7 @@ class Visual_Utils:
             column_use_plan.controls.append(row)
         page.add(column_use_plan)
 # ========================================================================================================
+    
     # metodo para mostrar los detalles de un evento
     @staticmethod
     def show_event_details(page:ft.Page, id:str):
@@ -233,6 +236,7 @@ class Visual_Utils:
             event_resources_column
         ]
         page.add(event_col)
+    
     # =========================================================
     def _get_visual_resource(item: Worker | Resource):
         item_row = ft.Row([])
@@ -258,6 +262,7 @@ class Visual_Utils:
             ]
         return item_row
     # =========================================================
+    
     # metodo para guardar los cambios de los elementos borrados
     def save_deletions(page:ft.Page, dom:Domain):
         if len(dom.event_to_delete) > 0:
@@ -274,11 +279,13 @@ class Visual_Utils:
         page.add(dlg)
         page.update()
     # ====================================================================================================
+    
     @staticmethod
     def on_click_save(page:ft.Page, dom:Domain, item_list:list, btn:ft.ElevatedButton):
         dom.save_pending()
         Visual_Utils.visible_btn(page, item_list, btn)
         page.update()
+    
     # funcion para controlar la visibilidad de los botones================================================
     @staticmethod
     def visible_btn(page: ft.Page, item_list:list, btn:ft.ElevatedButton):

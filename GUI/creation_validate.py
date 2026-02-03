@@ -9,6 +9,7 @@ class Creation_Validate:
         dialog = Creation_Validate._create_dialog(page, title, text)
         dialog.open = True
         page.add(dialog)
+   
     @staticmethod
     def validate_date(page: ft.Page, year, month, day, hour, minute, seconds) -> datetime:
         try:
@@ -77,11 +78,13 @@ class Creation_Validate:
         
         Creation_Validate.hide_menu(page, menu)
     # ======================================================================================
+    
     # metodo para mostrar el menu inteligente
     @staticmethod
     def show_menu(e, page:ft.Page, specialities:set[str], speciality_menu:ft.ListView):
         Creation_Validate.filter_options(e, page, specialities, speciality_menu)
     # ======================================================================================
+    
     # metodo para validar si la especialidad introducida es correcta
     @staticmethod
     def validate_(page:ft.Page, field_name:str ,set:set[str], control) -> bool:
@@ -98,12 +101,14 @@ class Creation_Validate:
         page.update()
         return True
     # =======================================================================================
+    
     # metodo para oculrar el menu inteligente
     @staticmethod
     def hide_menu(page:ft.Page, speciality_menu:ft.ListView):
         speciality_menu.visible = False
         page.update()
     # ==========================================================================================
+    
     # funcion para convertir el nombre del mes a un numero
     @staticmethod
     def _month_to_num(month:str) -> int:
