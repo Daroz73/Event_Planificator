@@ -45,10 +45,6 @@ class Visual_Utils:
         for e in events:
             card = ft.Card()
             event_row = ft.Row(expand=True)
-            # event_id = ft.Text(f"Event ID: {e.id}")
-            # event_name = ft.Text(f"Event Name: {e.name}")
-            # event_begin = ft.Text(f"Begin: {e.begin}")
-            # event_end = ft.Text(f"End: {e.end}")
             view_details_option = ft.MenuItemButton(
                 content=ft.Text("View Details"),
                 on_click=lambda e, e_id=e.id: Visual_Utils.show_event_details(page,e_id)
@@ -353,6 +349,7 @@ class Visual_Utils:
     @staticmethod
     def _card(title:str, subtitle:str, content:list, actions:list):
         card = ft.Card(
+            expand=True,
             elevation=3,
             content=ft.Container(
                 padding=15,

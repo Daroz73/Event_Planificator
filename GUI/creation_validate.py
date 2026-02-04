@@ -21,7 +21,7 @@ class Creation_Validate:
             seconds = int(seconds)
 
             created_date = datetime(year, month, day, hour, minute, seconds)
-            if created_date >= datetime.now():
+            if created_date.second >= datetime.now().second - 60:
                 return created_date
             else:
                 dialog = Creation_Validate._create_dialog(page, "Invalid Date", "The date must be in the future")

@@ -20,7 +20,8 @@
         "name": "Dayan Rodriguez",
         "co_requested": "laptop",
         "use_plan": [
-            "e2"
+            "e2",
+            "e3"
         ],
         "specialty": "Psiquiatría"
     },
@@ -56,7 +57,9 @@
         "id": "w10",
         "name": "Laura Fernández",
         "co_requested": "lapiceros",
-        "use_plan": [],
+        "use_plan": [
+            "e3"
+        ],
         "specialty": "Psiquiatría"
     },
     {

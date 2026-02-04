@@ -50,5 +50,28 @@
             "r2",
             "r6"
         ]
+    },
+    {
+        "id": "e3",
+        "name": "Conferencia",
+        "personal_requested": {
+            "Psiquiatría": 2
+        },
+        "resources_requested": {
+            "lapiceros": 1,
+            "laptop": 1
+        },
+        "specialist_in_charge": "Psiquiatría",
+        "begin": "2026-02-03T23:38:00",
+        "end": "2026-02-04T01:38:00",
+        "is_emergency": "False",
+        "workers": [
+            "w3",
+            "w10"
+        ],
+        "resources": [
+            "r2",
+            "r24"
+        ]
     }
 ]
