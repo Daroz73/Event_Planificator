@@ -386,7 +386,7 @@ class Create_Utils:
             return
         if not Creation_Validate.validate_(page, co_requested, dom.get_specialities(), crt_co_requested):
             return
-        if name not in dom.get_specialities_by_resource()[name]:
+        if not "all" in dom.get_specialities_by_resource()[name] and name not in dom.get_specialities_by_resource()[name]:
             Creation_Validate.validate_action(page, "Invalid speciality", 
                                               f"The speciality '{co_requested}' cannot use the resource '{name}'")
             return
