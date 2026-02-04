@@ -3,7 +3,9 @@
         "id": "r2",
         "name": "laptop",
         "co_requested": "Psiquiatría",
-        "use_plan": []
+        "use_plan": [
+            "e2"
+        ]
     },
     {
         "id": "r3",
@@ -27,7 +29,9 @@
         "id": "r6",
         "name": "estetoscopios",
         "co_requested": "Ginecología",
-        "use_plan": []
+        "use_plan": [
+            "e2"
+        ]
     },
     {
         "id": "r7",
@@ -81,12 +85,6 @@
         "id": "r15",
         "name": "monitores multiparamétricos",
         "co_requested": "Medicina de emergencia",
-        "use_plan": []
-    },
-    {
-        "id": "r16",
-        "name": "incubadoras neonatales",
-        "co_requested": "Neonatología",
         "use_plan": []
     },
     {

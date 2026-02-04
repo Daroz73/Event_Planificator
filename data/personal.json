@@ -3,7 +3,9 @@
         "id": "w1",
         "name": "Yoly Sanchez",
         "co_requested": "estetoscopios",
-        "use_plan": [],
+        "use_plan": [
+            "e2"
+        ],
         "specialty": "Ginecología"
     },
     {
@@ -17,7 +19,9 @@
         "id": "w3",
         "name": "Dayan Rodriguez",
         "co_requested": "laptop",
-        "use_plan": [],
+        "use_plan": [
+            "e2"
+        ],
         "specialty": "Psiquiatría"
     },
     {
@@ -40,13 +44,6 @@
         "co_requested": "Camilla",
         "use_plan": [],
         "specialty": "Enfermería"
-    },
-    {
-        "id": "w8",
-        "name": "María López",
-        "co_requested": "espéculo",
-        "use_plan": [],
-        "specialty": "Ginecología"
     },
     {
         "id": "w9",
