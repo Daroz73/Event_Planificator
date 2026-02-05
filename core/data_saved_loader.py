@@ -24,6 +24,7 @@ class Data_saved_loader:
     def set_file_info(info, file_name:str):
         with open("data/"+f"{file_name}.json", "w",encoding="utf-8") as f:
             json.dump(info, f, indent=4, ensure_ascii=False)
+    
     # Metodo para cargar la info de un archivo .json
     @staticmethod
     def _load_file(file_name:str):
@@ -81,9 +82,9 @@ class Data_saved_loader:
     def update_all(items:list, file_name:str):
         data = []
         for item in items:
-            data.append(Data_saved_loader._format_resource_to_json(item))
-        with open("data/"+f"{file_name}.json", "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4, ensure_ascii=False)
+            data.append(Data_saved_loader.format_to_json(item))
+        Data_saved_loader.set_file_info(data, file_name)
+    
     # metodo para convertir un Resource en un dicionario para poder almacenarlo en un JSON
     def _format_resource_to_json(element: Resource|Worker):
         json_element = {

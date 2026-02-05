@@ -4,6 +4,7 @@
         "name": "Yoly Sanchez",
         "co_requested": "estetoscopios",
         "use_plan": [
+            "e2",
             "e2"
         ],
         "specialty": "Ginecología"
@@ -21,7 +22,7 @@
         "co_requested": "laptop",
         "use_plan": [
             "e2",
-            "e3"
+            "e2"
         ],
         "specialty": "Psiquiatría"
     },
@@ -57,9 +58,7 @@
         "id": "w10",
         "name": "Laura Fernández",
         "co_requested": "lapiceros",
-        "use_plan": [
-            "e3"
-        ],
+        "use_plan": [],
         "specialty": "Psiquiatría"
     },
     {
@@ -119,13 +118,6 @@
         "specialty": "Radiología"
     },
     {
-        "id": "w19",
-        "name": "Jorge Pineda",
-        "co_requested": "tomógrafos computarizados (TAC)",
-        "use_plan": [],
-        "specialty": "Radiología"
-    },
-    {
         "id": "w20",
         "name": "Luis Cabrera",
         "co_requested": "ambulancias",
@@ -133,10 +125,10 @@
         "specialty": "Chofer"
     },
     {
-        "id": "w21",
-        "name": "Roberto Salas",
-        "co_requested": "ambulancias",
+        "id": "w4",
+        "name": "Ramon",
+        "co_requested": "esparadrapos",
         "use_plan": [],
-        "specialty": "Chofer"
+        "specialty": "Enfermería"
     }
 ]

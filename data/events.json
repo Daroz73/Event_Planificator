@@ -28,30 +28,6 @@
         "resources": []
     },
     {
-        "id": "e2",
-        "name": "Prueba",
-        "personal_requested": {
-            "Ginecología": 1,
-            "Psiquiatría": 1
-        },
-        "resources_requested": {
-            "estetoscopios": 1,
-            "laptop": 1
-        },
-        "specialist_in_charge": "Ginecología",
-        "begin": "2026-02-04T18:59:00",
-        "end": "2026-02-04T19:59:00",
-        "is_emergency": "False",
-        "workers": [
-            "w1",
-            "w3"
-        ],
-        "resources": [
-            "r2",
-            "r6"
-        ]
-    },
-    {
         "id": "e3",
         "name": "Conferencia",
         "personal_requested": {
@@ -75,23 +51,27 @@
         ]
     },
     {
-        "id": "e7",
-        "name": "CHOFERES",
+        "id": "e2",
+        "name": "Prueba",
         "personal_requested": {
-            "Chofer": 1
+            "Ginecología": 1,
+            "Psiquiatría": 1
         },
         "resources_requested": {
-            "ambulancias": 1
+            "estetoscopios": 1,
+            "laptop": 1
         },
-        "specialist_in_charge": "Chofer",
-        "begin": "2026-02-04T10:04:00",
-        "end": "2026-02-04T12:14:00",
-        "is_emergency": "True",
+        "specialist_in_charge": "Ginecología",
+        "begin": "2026-02-04T21:42:00",
+        "end": "2026-02-04T22:42:00",
+        "is_emergency": "False",
         "workers": [
-            "w20"
+            "w1",
+            "w3"
         ],
         "resources": [
-            "r20"
+            "r2",
+            "r6"
         ]
     }
 ]

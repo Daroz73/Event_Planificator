@@ -185,7 +185,7 @@ class Create_Utils:
         save_event_btn = ft.ElevatedButton(
             "Save",
             visible=False,
-            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_events, save_event_btn), 
+            on_click=lambda e: (Visual_Utils.on_click_save_creation(page, dom, dom.pending_events, save_event_btn), 
                                 Creation_Validate.validate_action(page,"Saved","Events saved successfully")
                                 )
         )
@@ -260,7 +260,7 @@ class Create_Utils:
         save_workers_bts = ft.ElevatedButton(
             "Save",
             visible=False,
-            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_workers, save_workers_bts), 
+            on_click=lambda e: (Visual_Utils.on_click_save_creation(page, dom, dom.pending_workers, save_workers_bts), 
                     Creation_Validate.validate_action(page,"Saved","Workers saved successfully")
                     )
         )
@@ -317,7 +317,7 @@ class Create_Utils:
         save_resources_btn = ft.ElevatedButton(
             "Save",
             visible=False,
-            on_click=lambda e: (Visual_Utils.on_click_save(page, dom, dom.pending_resources, save_resources_btn), 
+            on_click=lambda e: (Visual_Utils.on_click_save_creation(page, dom, dom.pending_resources, save_resources_btn), 
                                 Creation_Validate.validate_action(page,"Saved","Resource saved successfully")
                             )
         )

@@ -37,8 +37,18 @@ class Visual_Utils:
             visible=False,
             icon=ft.Icon(ft.Icons.SAVE),
             on_click=lambda e: (
-                Visual_Utils.save_deletions(page,dom),
-                Visual_Utils.visible_btn(page, dom.event_to_delete, save_btn)
+                Visual_Utils.on_click_save_creation(page,dom, dom.pending_events, save_btn),
+                Visual_Utils.visible_btn(page, dom.pending_events, save_btn)
+            )
+        )
+
+        delete_btn = ft.ElevatedButton(
+            text = "Confirm Deletions",
+            visible=False,
+            icon=ft.Icon(ft.Icons.DELETE_FOREVER),
+            on_click=lambda e: (
+                Visual_Utils.on_click_save_deletions(page,dom, list(dom.event_to_delete), delete_btn),
+                Visual_Utils.visible_btn(page, dom.event_to_delete, delete_btn)
             )
         )
 
@@ -53,7 +63,7 @@ class Visual_Utils:
                 content=ft.Text("Delete Event"),
                 on_click=lambda e, e_id=e.id, row=event_row: (
                     Delete_Utils.remove_item_grafic(page, dom, "e", e_id, row),
-                    Visual_Utils.visible_btn(page, dom.event_to_delete, save_btn)
+                    Visual_Utils.visible_btn(page, dom.event_to_delete, delete_btn)
                 )
             )
             card = Visual_Utils._card(
@@ -82,6 +92,7 @@ class Visual_Utils:
             event_row.controls.append(card)
             page.add(event_row)
         page.add(save_btn)
+        page.add(delete_btn)
 
     # =====================================================================
     @staticmethod
@@ -105,8 +116,18 @@ class Visual_Utils:
             visible=False,
             icon=ft.Icon(ft.Icons.SAVE),
             on_click=lambda e: (
-                Visual_Utils.save_deletions(page, dom),
-                Visual_Utils.visible_btn(page, dom.worker_to_delete if kind.lower() == "worker" else dom.resource_to_delete, save_btn)
+                Visual_Utils.on_click_save_creation(page,dom, list(dom.worker_to_delete) if kind == "worker" else list(dom.resource_to_delete), save_btn),
+                Visual_Utils.visible_btn(page, dom.event_to_delete, save_btn)
+            )
+        )
+
+        delete_btn = ft.ElevatedButton(
+            text = "Delete Selected",
+            visible=False,
+            icon=ft.Icon(ft.Icons.DELETE_FOREVER),
+            on_click=lambda e: (
+                Visual_Utils.on_click_save_deletions(page, dom, list(dom.worker_to_delete) if kind.lower() == "worker" else list(dom.resource_to_delete), delete_btn),
+                Visual_Utils.visible_btn(page, dom.worker_to_delete if kind.lower() == "worker" else dom.resource_to_delete, delete_btn)
             )
         )
 
@@ -177,6 +198,7 @@ class Visual_Utils:
                 resource_row.controls.append(card)
                 page.add(resource_row)
         page.add(save_btn)
+        page.add(delete_btn)
         
 # ===========================================================================================================
     
@@ -331,11 +353,21 @@ class Visual_Utils:
     # ====================================================================================================
     
     @staticmethod
-    def on_click_save(page:ft.Page, dom:Domain, item_list:list, btn:ft.ElevatedButton):
+    def on_click_save_creation(page:ft.Page, dom:Domain, item_list:list, btn:ft.ElevatedButton):
         dom.save_pending()
         Visual_Utils.visible_btn(page, item_list, btn)
         page.update()
     
+    # ====================================================================================================
+    @staticmethod
+    def on_click_save_deletions(page:ft.Page, dom:Domain, item_list:list, btn:ft.ElevatedButton):
+        dom.persist_deletions()
+        dlg = Creation_Validate._create_dialog(page, "Save", "Deletions saved successfully")
+        dlg.open = True
+        page.add(dlg)
+        Visual_Utils.visible_btn(page, item_list, btn)
+        page.update()
+
     # funcion para controlar la visibilidad de los botones================================================
     @staticmethod
     def visible_btn(page: ft.Page, item_list:list, btn:ft.ElevatedButton):

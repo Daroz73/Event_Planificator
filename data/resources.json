@@ -5,7 +5,7 @@
         "co_requested": "Psiquiatría",
         "use_plan": [
             "e2",
-            "e3"
+            "e2"
         ]
     },
     {
@@ -31,6 +31,7 @@
         "name": "estetoscopios",
         "co_requested": "Ginecología",
         "use_plan": [
+            "e2",
             "e2"
         ]
     },
@@ -134,8 +135,6 @@
         "id": "r24",
         "name": "lapiceros",
         "co_requested": "Psiquiatría",
-        "use_plan": [
-            "e3"
-        ]
+        "use_plan": []
     }
 ]

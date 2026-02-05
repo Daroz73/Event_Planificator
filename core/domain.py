@@ -182,10 +182,49 @@ class Domain:
         self.pending_workers.clear()
         self.pending_resources.clear()
     
+    # Metodo para salvar los elmentos eliminados en el json=============================================
+    def persist_deletions(self):
+        # actualizar las listas del domain quitando los elementos marcados para eliminar
+        if len(self.event_to_delete) > 0:
+            self.events = [e for e in self.events if e.id not in self.event_to_delete]
+            copy_event = self.events.copy()
+            for c_e in copy_event:
+                c_e.workers = [w.id for w in c_e.workers]
+                c_e.resources = [ r.id for r in c_e.resources]
+            Data_saved_loader.update_all(copy_event, "events")
+        if len(self.worker_to_delete) > 0:
+            self.workers = [w for w in self.workers if w.id not in self.worker_to_delete]
+            copy_worker = self.workers.copy()
+            for c_w in copy_worker:
+                c_w.use_plan = [e.id for e in c_w.use_plan]
+            Data_saved_loader.update_all(copy_worker, "personal")
+        if len(self.resource_to_delete) > 0:
+            self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]
+            copy_resource = self.resources
+            for c_r in copy_resource:
+                c_r.use_plan = [e.id for e in c_r.use_plan]
+            Data_saved_loader.update_all(c_r, "resources")
+        # Limpiamos los set de objetos a eliminar
+        self.event_to_delete.clear()
+        self.worker_to_delete.clear()
+        self.resource_to_delete.clear()
+
     # metodo para hacer que persistan los cambios de los trabajadores y recursos=======================
     def persist_workers_and_resources(self):
-        Data_saved_loader.update_all(self.workers, "personal")
-        Data_saved_loader.update_all(self.resources, "resources")
+        if len(self.workers) > 0 and len(self.workers[0].use_plan) > 0 and isinstance(self.workers[0].use_plan[0], Event):
+            copy_workes = self.workers.copy()
+            for c_w in copy_workes:
+                c_w.use_plan = [e.id if isinstance(e,Event) else e for e in c_w.use_plan]
+            Data_saved_loader.update_all(copy_workes, "personal")
+        else:
+            Data_saved_loader.update_all(self.workers, "personal")
+        if len(self.resources) > 0 and len(self.resources[0].use_plan) > 0 and isinstance(self.resources[0].use_plan[0], Event):
+            copy_resource = self.workers.copy()
+            for c_w in copy_resource:
+                c_w.use_plan = [e.id if isinstance(e,Event) else e for e in c_w.use_plan]
+            Data_saved_loader.update_all(copy_resource, "resources")
+        else:
+            Data_saved_loader.update_all(self.resources, "resources")
 
     # metodo que devuelve todas las especialidades posibles de los trabajadores=========================================
     def get_specialities(self) -> set[str]:
