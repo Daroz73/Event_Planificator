@@ -44,13 +44,11 @@ class Domain:
     # funcion que actualiza los eventos y elimina los que ya hayan pasado
     def update_events(self):
         now = datetime.now()
-        for e in self.events[:]: # trabajamos con una copia de self.events para evitar problemas al eliminar elementos mientras iteramos
-            if (e.end - now).total_seconds() <= 0:
-                for w in e.workers :
-                    w.use_plan.remove(e)
-                for r in e.resources :
-                    r.use_plan.remove(e)
-                self.events.remove(e)
+        if len(self.events) > 0:
+            for e in list(self.events): # trabajamos con una copia de self.events para evitar problemas al eliminar elementos mientras iteramos
+                if (e.end - now).total_seconds() <= 0:
+                    self.event_to_delete.add(e.id)
+            self.persist_deletions()
     # metodo para guardar permanetemete cualqueir elemento creado
     def add(self, item: Event | Worker | Resource):
         if isinstance(item, Event):
@@ -104,12 +102,18 @@ class Domain:
         if type.lower() == "e" or type.lower() == "event":
             prefix = "e"
             existing_ids = {item.id for item in self.events}
+            for item in self.pending_events:
+                existing_ids.add(item.id)
         elif type.lower() == "w" or type.lower() == "worker":
             prefix = "w"
             existing_ids = {item.id for item in self.workers}
+            for item in self.pending_workers:
+                existing_ids.add(item.id)
         elif type.lower() == "r" or type.lower() == "resource":
             prefix = "r"
             existing_ids = {item.id for item in self.resources}
+            for item in self.pending_resources:
+                existing_ids.add(item.id)
         else:
             raise ValueError("Tipo de ID no reconocido.")
         
@@ -200,10 +204,10 @@ class Domain:
             Data_saved_loader.update_all(copy_worker, "personal")
         if len(self.resource_to_delete) > 0:
             self.resources = [r for r in self.resources if r.id not in self.resource_to_delete]
-            copy_resource = self.resources
+            copy_resource = self.resources.copy()
             for c_r in copy_resource:
                 c_r.use_plan = [e.id for e in c_r.use_plan]
-            Data_saved_loader.update_all(c_r, "resources")
+            Data_saved_loader.update_all(copy_resource, "resources")
         # Limpiamos los set de objetos a eliminar
         self.event_to_delete.clear()
         self.worker_to_delete.clear()

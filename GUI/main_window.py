@@ -1,5 +1,7 @@
 import flet as ft
 import sys, os
+import threading
+import time
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
@@ -9,10 +11,22 @@ from create_utils import Create_Utils
 from core.domain import Domain
 
 
+def backgound_update(domain:Domain):
+    # Funcion que corre un hilo separado para no bloquear la UI
+    while True:
+        try:
+            domain.update_events()
+        except Exception as e:
+            print(f"Error al actualizar eventos: {e}")
+        time.sleep(60) # Espera 60 segundos antes de volver a actualizar
+
 def main(page: ft.Page):
     page.title = "Event Planificator"
     page.scroll = ft.ScrollMode.AUTO
     domain = Domain()
+
+    update_thread = threading.Thread(target=backgound_update, args=(domain,), daemon=True)
+    update_thread.start()
 
     navegation_bar = ft.AppBar(
         leading=ft.Icon(ft.Icons.BUSINESS),
