@@ -6,8 +6,8 @@ import time
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT)
 
-from visual_utils import Visual_Utils
-from create_utils import Create_Utils
+from GUI.visual_utils import Visual_Utils
+from GUI.create_utils import Create_Utils
 from core.domain import Domain
 
 

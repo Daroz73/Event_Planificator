@@ -4,8 +4,7 @@
         "name": "Yoly Sanchez",
         "co_requested": "estetoscopios",
         "use_plan": [
-            "e2",
-            "e2"
+            "e1"
         ],
         "specialty": "Ginecología"
     },
@@ -20,10 +19,7 @@
         "id": "w3",
         "name": "Dayan Rodriguez",
         "co_requested": "laptop",
-        "use_plan": [
-            "e2",
-            "e2"
-        ],
+        "use_plan": [],
         "specialty": "Psiquiatría"
     },
     {

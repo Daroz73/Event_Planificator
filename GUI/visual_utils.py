@@ -1,14 +1,15 @@
 import flet as ft
 from dataclasses import dataclass
 import sys, os
+
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),".."))
 sys.path.append(ROOT)
-from flet import Row, Column
+
 from core.domain import Domain
-from delete_utils import Delete_Utils
+from GUI.delete_utils import Delete_Utils
 from core.worker import Worker
 from core.resource import Resource
-from creation_validate import Creation_Validate
+from GUI.creation_validate import Creation_Validate
 
 class Visual_Utils:
 

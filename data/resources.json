@@ -4,8 +4,7 @@
         "name": "estetoscopios",
         "co_requested": "Ginecología",
         "use_plan": [
-            "e2",
-            "e2"
+            "e1"
         ]
     },
     {
@@ -18,10 +17,7 @@
         "id": "r3",
         "name": "laptop",
         "co_requested": "Psiquiatría",
-        "use_plan": [
-            "e2",
-            "e2"
-        ]
+        "use_plan": []
     },
     {
         "id": "r7",
