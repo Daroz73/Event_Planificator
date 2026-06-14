@@ -20,7 +20,7 @@ El proyecto está orientado a entornos médicos, pero su arquitectura permite ad
 
 ## 🖥️ Tecnologías utilizadas
 
-- **Python 3.10+**
+- **Python 3.13.7**
 - **Flet** (interfaz gráfica)
 - **JSON** (persistencia de datos)
 
@@ -47,13 +47,13 @@ pip install -r requirements.txt
 El punto de entrada del sistema es:
 
 ```
-GUI/main_windows.py
+main.py
 ```
 
 Para ejecutar la aplicación:
 
 ```bash
-python GUI/main_windows.py
+python main.py
 ```
 
 ---
@@ -62,16 +62,16 @@ python GUI/main_windows.py
 
 ```
 📦 sistema-planificacion-eventos
- ├── GUI/
- │    └── main_windows.py   # Punto de entrada
- ├── core/                # Lógica del negocio
+ ├── GUI/                 # Elementos de la UI
+ ├── core/                # Lógica del proyecto
  ├── data/                  # Archivos JSON (persistencia)
  │    ├── events.json
  │    ├── personal.json
  │    └── resources.json
  ├── requirements.txt
  ├── README.md
- └── Informe_Proyecto.pdf
+ │── main.py   # Punto de entrada
+ └── report.md
 ```
 
 ---
