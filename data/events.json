@@ -1,1 +1,18 @@
-[]
+[
+    {
+        "id": "e1",
+        "name": "parto",
+        "personal_requested": {
+            "Ginecología": 1
+        },
+        "resources_requested": {
+            "estetoscopios": 1
+        },
+        "specialist_in_charge": "Ginecología",
+        "begin": "2026-06-14T00:30:00",
+        "end": "2027-06-14T01:30:00",
+        "is_emergency": "False",
+        "workers": [],
+        "resources": []
+    }
+]

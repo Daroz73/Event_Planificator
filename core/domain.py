@@ -223,7 +223,7 @@ class Domain:
         else:
             Data_saved_loader.update_all(self.workers, "personal")
         if len(self.resources) > 0 and len(self.resources[0].use_plan) > 0 and isinstance(self.resources[0].use_plan[0], Event):
-            copy_resource = self.workers.copy()
+            copy_resource = self.resources.copy()
             for c_w in copy_resource:
                 c_w.use_plan = [e.id if isinstance(e,Event) else e for e in c_w.use_plan]
             Data_saved_loader.update_all(copy_resource, "resources")
@@ -459,3 +459,14 @@ class Domain:
                 else:
                     data[r.name] = 1
         return data
+    
+    def get_required_resource_by_specialities(self, specialities:list[str])-> dict[str, set[str]]:
+        result = {}
+
+        for speciality in specialities:
+            resources = { w.co_requested for w in self.workers if w.specialty == speciality}
+            
+            if resources:
+                result[speciality] = resources
+        
+        return result

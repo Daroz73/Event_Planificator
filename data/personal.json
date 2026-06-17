@@ -3,9 +3,7 @@
         "id": "w1",
         "name": "Yoly Sanchez",
         "co_requested": "estetoscopios",
-        "use_plan": [
-            "e1"
-        ],
+        "use_plan": [],
         "specialty": "Ginecología"
     },
     {

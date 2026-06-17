@@ -3,9 +3,7 @@
         "id": "r1",
         "name": "estetoscopios",
         "co_requested": "Ginecología",
-        "use_plan": [
-            "e1"
-        ]
+        "use_plan": []
     },
     {
         "id": "r2",

@@ -33,8 +33,7 @@ class Create_Utils:
             label="Specialist in Charge",
             data = {"clicking_menu":False},
             on_change=lambda e: Creation_Validate.filter_options(e, page, specialist_option, specialist_menu),
-            on_focus=lambda e: Creation_Validate.show_menu(e, page, specialist_option, specialist_menu),
-            # on_blur=lambda e: Creation_Validate.hide_specialities_menu(page, specialist_menu) 
+            on_focus=lambda e: Creation_Validate.show_menu(e, page, specialist_option, specialist_menu) 
             )
 
         months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre"
@@ -76,26 +75,68 @@ class Create_Utils:
             height=150,
             spacing=0
         )
+
         menu_specialist_personal_container = ft.Container(
             content=specialist_menu_personal_requested,
             width=250,
             height=150
         )
+
+        required_resources_text = ft.Text(
+            "",
+            color = ft.Colors.ORANGE,
+            size = 14
+            )
+
         personal_col = ft.Column([])
         specialist = ft.TextField(
             label="Specialists: ",
             on_change=lambda e: Creation_Validate.filter_options(e, page, specialist_option, specialist_menu_personal_requested),
             on_click=lambda e: Creation_Validate.show_menu(e, page, specialist_option, specialist_menu_personal_requested)
-            # on_blur=lambda e:
             )
         count = ft.Dropdown(
             label="Count: ",
             options=[ft.dropdown.Option(i) for i in range(1,51)],
-            width=150
+            width=150,
+            on_change=lambda e: Create_Utils._update_required_relations(
+                page, 
+                dom, 
+                source_col=personal_col, 
+                target_col=resource_col, 
+                result_text=required_resources_text,
+                source_attr="specialty",
+                target_attr="co_requested",
+                missing_msg="⚠ Recursos obligatorios faltantes:",
+                success_msg=(
+                    "✅ Todos los recursos obligatorios "
+                    "fueron agregados."
+                ),
+                no_relation_msg=(
+                    "ℹ No existen trabajadores registrados "
+                    "para las especialidades actualmente asignadas."
+                )
             )
+        )
         btn_add_specialist = ft.FloatingActionButton(
             icon=ft.Icons.ADD,
-            on_click=lambda e: Create_Utils._agg_row(page, personal_col, "Specialist: ", specialist_option)
+            on_click=lambda e:
+                Create_Utils._agg_row(
+                    page,
+                    personal_col,
+                    "Specialist:",
+                    specialist_option,
+
+                    dom,
+                    resource_col,
+                    required_resources_text,
+
+                    "specialty",
+                    "co_requested",
+
+                    "⚠ Recursos obligatorios faltantes:",
+                    "✅ Todos los recursos obligatorios fueron agregados.",
+                    "ℹ No existen recursos asociados a los especialistas seleccionados."
+                )
             )
         personal_row = ft.Row([
                 specialist,
@@ -118,6 +159,13 @@ class Create_Utils:
             width=250,
             height=150
         )
+
+        required_specialities_text = ft.Text(
+            "",
+            color = ft.Colors.ORANGE,
+            size = 14
+        )
+
         resource = ft.TextField(
             label="Resource: ",
             on_change=lambda e: Creation_Validate.filter_options(e, page, resources_options, resources_menu),
@@ -126,11 +174,49 @@ class Create_Utils:
         r_count = ft.Dropdown(
             label="Count: ",
             options=[ft.dropdown.Option(i) for i in range(1, 51)],
-            width=150
+            width=150,
+            on_change=lambda e: Create_Utils._update_required_relations(
+                page, 
+                dom, 
+                source_col=resource_col,
+                target_col=personal_col,
+                result_text=required_specialities_text,
+                source_attr="co_requested",
+                target_attr="specialty",
+                missing_msg=(
+                    "⚠ Especialistas necesarios que "
+                    "se deben asignar:"
+                    ),
+                success_msg=(
+                    "✅ Todos los especialistas necesarios "
+                    "asociados a los recursos fueron agregados."
+                    ),
+                no_relation_msg=(
+                    "ℹ No existen trabajadores registrados "
+                    "que utilicen los recursos actualmente asignados."
+                    )
+                )
             )
         btn_add_resource = ft.FloatingActionButton(
             icon=ft.Icons.ADD,
-            on_click=lambda e: Create_Utils._agg_row(page, resource_col, "Resource: ", resources_options)
+            on_click=lambda e:
+                Create_Utils._agg_row(
+                    page,
+                    resource_col,
+                    "Resource:",
+                    resources_options,
+
+                    dom,
+                    personal_col,
+                    required_specialities_text,
+
+                    "co_requested",
+                    "specialty",
+
+                    "⚠ Especialistas necesarios que se deben asignar:",
+                    "✅ Todos los especialistas necesarios fueron agregados.",
+                    "ℹ No existen trabajadores registrados que utilicen los recursos seleccionados."
+                )
             )
         resource_row = ft.Row([
                 resource,
@@ -201,8 +287,10 @@ class Create_Utils:
             duration_row,
             btn_find_slot,
             ft.Text("Ask the personal requested: "),
+            required_resources_text,
             personal_col,
             ft.Text("Resources requested: "),
+            required_specialities_text,
             resource_col,
             is_emergency,
             create_event_btn,
@@ -212,7 +300,9 @@ class Create_Utils:
             expand=True)
 
         page.add(column)
+
 # ===========================================================================================================
+    
     @staticmethod
     def add_worker(page: ft.Page, dom:Domain, navegation_bar):
         page.clean()
@@ -243,17 +333,16 @@ class Create_Utils:
             height=150,
             spacing=0
         )
-        worker_role = ft.TextField(
+        worker_speciality = ft.TextField(
             label="Specialist",
             on_change=lambda e: Creation_Validate.filter_options(e, page, worker_specialities, worker_menu_itelligent),
             on_focus=lambda e: Creation_Validate.show_menu(e, page, worker_specialities, worker_menu_itelligent),
-            # on_blur=lambda e: Creation_Validate.hide_specialities_menu(page, worker_menu_itelligent)
         )
         add_worker_btn = ft.ElevatedButton("Add Worker",
                               on_click=lambda e: Create_Utils._create_worker(page, dom, worker_name.value,
                                                                             worker_co_requested.value, 
-                                                                            worker_role.value, worker_co_requested,
-                                                                            worker_role,
+                                                                            worker_speciality.value, worker_co_requested,
+                                                                            worker_speciality,
                                                                             save_workers_bts
                                                                             )
                             )
@@ -264,18 +353,43 @@ class Create_Utils:
                     Creation_Validate.validate_action(page,"Saved","Workers saved successfully")
                     )
         )
+
+        help_btn = ft.ElevatedButton(
+            "Help",
+            icon=ft.Icons.HELP,
+            on_click=lambda e: Create_Utils.help_btn_warning(page, dom, worker_co_requested, worker_speciality, worker_resource_warning_text, worker_speciality_warning_text)
+        )
+
+        worker_speciality_warning_text = ft.Text(
+            "",
+            color=ft.Colors.ORANGE,
+            size=14,
+        )
+
+        worker_resource_warning_text = ft.Text(
+            "",
+            color=ft.Colors.ORANGE,
+            size=14,
+        )
+
+
         column = ft.Column([
             worker_name,
             worker_co_requested,
             worker_co_requested_menu,
-            worker_role,
+            worker_resource_warning_text,
+            worker_speciality,
             worker_menu_itelligent,
+            worker_speciality_warning_text,
             add_worker_btn,
+            help_btn,
             save_workers_bts
         ])
 
         page.add(column)
+
 # ===========================================================================================================
+    
     @staticmethod
     def add_resource(page: ft.Page, dom:Domain, navegation_bar):
         page.clean()
@@ -292,9 +406,9 @@ class Create_Utils:
         resource_name = ft.TextField(
             label="Resource Name",
             on_change=lambda e: Creation_Validate.filter_options(e, page, resources_names_options, resopurces_names_menu),
-            on_focus=lambda e: Creation_Validate.show_menu(e, page, resources_names_options, resopurces_names_menu) 
+            on_focus=lambda e: Creation_Validate.show_menu(e, page, resources_names_options, resopurces_names_menu)
         )
-
+    
         co_requested_option = dom.get_specialities()
         co_requested_menu = ft.ListView(
             controls=[],
@@ -321,16 +435,40 @@ class Create_Utils:
                                 Creation_Validate.validate_action(page,"Saved","Resource saved successfully")
                             )
         )
+
+        help_btn = ft.ElevatedButton(
+            "Help",
+            icon=ft.Icons.HELP,
+            on_click=lambda e: Create_Utils.help_btn_warning(page, dom, resource_name, resource_co_requested, resource_warning_text, speciality_warning_text)
+        )
+
+        resource_warning_text = ft.Text(
+            "",
+            color=ft.Colors.ORANGE,
+            size=14,
+        )
+
+        speciality_warning_text = ft.Text(
+            "",
+            color=ft.Colors.ORANGE,
+            size=14,
+        )
+
         column = ft.Column([
             resource_name,
             resopurces_names_menu,
+            resource_warning_text,
             resource_co_requested,
             co_requested_menu,
+            speciality_warning_text,
             add_resource_btn,
+            help_btn,
             save_resources_btn
         ])
         page.add(column)
+
 # == Metodos que desencadena el evento de crear event, worker o resource ==============================
+    
     @staticmethod
     def _create_event(page: ft.Page, ctr, dom:Domain, 
                       name, specialist_in_charge, b_y, b_m, b_d, b_h, b_min, e_y, e_m, e_d, e_h, e_min, 
@@ -354,14 +492,17 @@ class Create_Utils:
             if r not in data_resources.keys() or c > data_resources[r]:
                 Creation_Validate.validate_action(page, "Invalid resource", f"The resource '{r}' is not available in the required count")
                 return
+        
         id = dom.ids_generator("e")
         event = Event(id, name, personal_requested, resources_requested, specialist_in_charge, begin_date, end_date, is_emergency, [], [])
-        # dom.rebuild_relations()
+        dom.rebuild_relations()
         dom.pending_events.append(event)
         Creation_Validate.validate_action(page, "Success", f"The event {name} has been added to the wait list.\n For saved it click the Save Button.")
         Visual_Utils.visible_btn(page, dom.pending_events, btn_save)
         page.update()
+
     # =======================================================================================================
+
     @staticmethod
     def _create_worker(page:ft.Page, dom: Domain, name:str, co_requested:str, speciality: str, 
                        co_requested_ctr:ft.TextField, speciality_ctr:ft.TextField, save_btn:ft.ElevatedButton):
@@ -378,7 +519,9 @@ class Create_Utils:
         dom.add(worker)
         Visual_Utils.visible_btn(page, dom.pending_workers, save_btn)
         Creation_Validate.validate_action(page, "Added Worker", "The worker had added succefully")
+
     # =======================================================================================================
+
     @staticmethod
     def _create_resource(page:ft.Page, dom:Domain, name:str, co_requested:str, ctr_name:ft.TextField,
                         crt_co_requested:ft.TextField, save_btn:ft.ElevatedButton):
@@ -395,9 +538,27 @@ class Create_Utils:
         dom.add(resource)
         Visual_Utils.visible_btn(page, dom.pending_resources, save_btn)
         Creation_Validate.validate_action(page, "Added Resource", "The resources had added succefully")
+
     # =======================================================================================================
+
     @staticmethod
-    def _agg_row(page: ft.Page, column: ft.Column, label_value: str, speciality_option:set[str]):
+    def _agg_row(
+                page:ft.Page, 
+                column: ft.Column, 
+                label_value: str, 
+                speciality_option:set[str],
+                dom: Domain,
+                target_col: ft.Column,
+                result_text: ft.Text,
+
+                source_attr: str,
+                target_attr: str,
+
+                missing_msg: str,
+                success_msg: str,
+                no_relation_msg: str
+            ):
+
         menu = ft.ListView(
             controls=[],
             visible=False,
@@ -410,39 +571,109 @@ class Create_Utils:
             height=150
         )
         new_row = ft.Row([])
-    
+
         first_item = ft.TextField(
             label=label_value,
-            data={"menu":menu},
-            on_change=lambda e: Creation_Validate.filter_options(e, page, speciality_option, e.control.data["menu"]),
-            on_focus=lambda e: Creation_Validate.show_menu(e, page, speciality_option, e.control.data["menu"])
-        )
-        second_item = ft.Dropdown(
-            label="Count: ",
-            options=[ft.dropdown.Option(i) for i in range(1,51)],
-            width=150
+            data={"menu": menu},
+
+            on_change=lambda e: (
+
+                Creation_Validate.filter_options(
+                    e,
+                    page,
+                    speciality_option,
+                    e.control.data["menu"]
+                ),
+                Create_Utils._refresh_relation_text(
+                    page,
+                    dom,
+                    column,
+                    target_col,
+                    result_text,
+                    source_attr,
+                    target_attr,
+                    missing_msg,
+                    success_msg,
+                    no_relation_msg
+                )
+            ),
+            on_focus=lambda e: Creation_Validate.show_menu(e, page, speciality_option, e.control.data["menu"]
             )
+        )
+        
+        second_item = ft.Dropdown(
+            label="Count:",
+            options=[ft.dropdown.Option(i) for i in range(1, 51)],
+            width=150,
+            on_change=lambda e:
+                Create_Utils._refresh_relation_text(
+                    page,
+                    dom,
+                    column,
+                    target_col,
+                    result_text,
+                    source_attr,
+                    target_attr,
+                    missing_msg,
+                    success_msg,
+                    no_relation_msg
+                )
+        )
+        
         new_row.controls = [
             first_item,
             menu_container,
             second_item,
             ft.FloatingActionButton(
                 icon=ft.Icons.ADD, 
-                on_click=lambda e: Create_Utils._agg_row(page, column, label_value, speciality_option)
-                ),
+                on_click=lambda e: Create_Utils._agg_row(
+                    page,
+                    column,
+                    label_value,
+                    speciality_option,
+
+                    dom,
+                    target_col,
+                    result_text,
+
+                    source_attr,
+                    target_attr,
+
+                    missing_msg,
+                    success_msg,
+                    no_relation_msg
+                )
+            ),
             ft.FloatingActionButton(
                 icon=ft.Icons.REMOVE,
-                on_click=lambda e: Create_Utils._remove_row(page, column, new_row)
+                on_click=lambda e: (Create_Utils._remove_row(page, column, new_row),
+                                    Create_Utils._refresh_relation_text(
+                                    page,
+                                    dom,
+                                    column,
+                                    target_col,
+                                    result_text,
+                                    source_attr,
+                                    target_attr,
+                                    missing_msg,
+                                    success_msg,
+                                    no_relation_msg
+                                )
+                            )
                 )
         ]
         column.controls.insert(1,new_row)
         page.update()
+
     # ===============================================================================================
+
     @staticmethod
     def _remove_row(page: ft.Page, column: ft.Column, row: ft.Row):
         column.controls.remove(row)
         page.update()
+
     # ===============================================================================================
+
     @staticmethod
     def _get_values_from_column(column: ft.Column) -> dict:
         extracted_dict = {}
@@ -462,6 +693,7 @@ class Create_Utils:
                         value = 0
                     extracted_dict[key] = value
         return extracted_dict
+
     # ========================================================================================================
     # funcion para buscar hueco
     @staticmethod
@@ -495,3 +727,151 @@ class Create_Utils:
         e_min.value = f"{end.minute:02d}"
 
         page.update()
+
+    # ============================================================
+    @staticmethod
+    def _update_required_relations(
+        page: ft.Page,
+        dom: Domain,
+        source_col: ft.Column,
+        target_col: ft.Column,
+        result_text: ft.Text,
+        source_attr: str,
+        target_attr: str,
+        missing_msg: str,
+        success_msg: str,
+        no_relation_msg: str
+    ):
+
+        required_items = set()
+
+        source_requested = Create_Utils._get_values_from_column(source_col)
+
+        found_relation = False
+
+        for source_value in source_requested.keys():
+
+            for worker in dom.workers:
+
+                if getattr(worker, source_attr) == source_value:
+
+                    found_relation = True
+
+                    required_items.add(
+                        getattr(worker, target_attr)
+                    )
+
+        target_requested = Create_Utils._get_values_from_column(target_col)
+
+        missing_items = (
+            required_items -
+            set(target_requested.keys())
+        )
+
+        if missing_items:
+
+            result_text.value = (
+                missing_msg
+                + "\n• "
+                + "\n• ".join(sorted(missing_items))
+            )
+
+        elif found_relation:
+
+            result_text.value = success_msg
+
+        else:
+
+            result_text.value = no_relation_msg
+
+        page.update()
+    # ==========================================================
+
+    @staticmethod
+    def _refresh_relation_text(page: ft.Page, dom: Domain, source_col: ft.Column, target_col: ft.Column, 
+                               result_text: ft.Text, source_attr: str, target_attr: str, missing_msg: str,
+                               success_msg: str, no_relation_msg: str):
+        
+        Create_Utils._update_required_relations(page=page, dom=dom, source_col=source_col, target_col=target_col,
+            result_text=result_text, source_attr=source_attr, target_attr=target_attr, missing_msg=missing_msg,
+            success_msg=success_msg, no_relation_msg=no_relation_msg)
+    
+    #==============================================================
+    
+    @staticmethod
+    def _show_resource_specialities_warning(page: ft.Page, dom: Domain, resource_name: str, warning_text: ft.Text):
+        
+        if not resource_name:
+            warning_text.value = ""
+            page.update()
+            return
+
+        specialities = dom.get_specialities_by_resource()[resource_name]
+        print(specialities)
+
+        if specialities:
+            warning_text.value = (
+                "ℹ Este recurso puede ser utilizado por:\n• "
+                + "\n• ".join(sorted(specialities))
+            )
+        else:
+            warning_text.value = (
+                "⚠ Actualmente no existen trabajadores registrados "
+                "que utilicen este recurso."
+            )
+
+        page.update()
+
+
+    @staticmethod
+    def _show_speciality_resources_warning(page: ft.Page, dom: Domain, speciality: str, warning_text: ft.Text):
+
+        if not speciality:
+            warning_text.value = ""
+            page.update()
+            return
+        
+        resources = []
+        for r, s in dom.get_specialities_by_resource().items():
+            if speciality in s or "all" in s:
+                resources.append(r)
+
+        if resources:
+            warning_text.value = (
+                "ℹ Los trabajadores con esta especialidad "
+                "pueden utilizar:\n• "
+                + "\n• ".join(sorted(resources))
+            )
+        else:
+            warning_text.value = (
+                "⚠ No existen trabajadores registrados "
+                "con esta especialidad."
+            )
+
+        page.update()
+
+    # =================================================================================
+    @staticmethod
+    def help_btn_warning(page: ft.Page, dom: Domain, ft_resource: ft.TextField, 
+                         ft_speciality: ft.TextField, warning_text: ft.Text, warning_text2: ft.Text):
+        
+        valid_resource = (ft_resource.value is not None and ft_resource.value in dom.get_resources())
+
+        valid_speciality = (ft_speciality.value is not None and ft_speciality.value in dom.get_specialities())
+        
+        if valid_resource:
+            Create_Utils._show_resource_specialities_warning(page, dom, ft_resource.value, warning_text)
+
+        if valid_speciality:
+            Create_Utils._show_speciality_resources_warning(page, dom, ft_speciality.value, warning_text2)
+
+        if not valid_resource and not valid_speciality:
+            Creation_Validate.validate_action(
+                page,
+                "Información insuficiente",
+                (
+                    "Debe introducir un nombre de recurso válido "
+                    "o una especialidad válida para obtener ayuda."
+                )
+            )
+    # ====================================================================

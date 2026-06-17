@@ -1,7 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from core.resource import Resource
-from core.worker import Worker
 
 @dataclass
 class Event:
