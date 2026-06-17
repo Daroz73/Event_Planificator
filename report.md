@@ -132,6 +132,7 @@ una ginecólogo no puede hacer un ultrasonido sin la máquina de ultrasonido.*
 1. Abrir **Events|Worker|Resources → View Events|Worker|Resource**.
 2. Hacer click en los tres puntos en vertical que aparecen en la esquina inferior derecha de las postales que se muestran una vez realizdo el paso anterior 
 3. Click en **Delete Event|Worker|Resource**
+4. Cuando se hayan eliminado todos los *Event|Worker|Resource* deseados click in **Save**
 
 
 ## Eliminar eventos con fecha de finalización menor que la fecha actual de forma automáticamente:
